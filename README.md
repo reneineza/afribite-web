@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AfriBite 🥘
 
-## Getting Started
+AfriBite is a premier, full-stack e-commerce marketplace tailored for authentic African groceries, spices, snacks, and specialty ingredients. Built with modern web technologies, it offers a seamless shopping experience for the African diaspora across Canada.
 
-First, run the development server:
+![AfriBite Overview](https://images.unsplash.com/photo-1596040033229-a9821ebd058d?q=80&w=1200&auto=format&fit=crop)
 
+## 🚀 Tech Stack
+
+- **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/) & [Shadcn UI](https://ui.shadcn.com/)
+- **Backend & Database**: [Supabase](https://supabase.com/) (PostgreSQL)
+- **Authentication**: Supabase Auth
+- **Payments**: [Stripe](https://stripe.com/)
+- **State Management**: [Zustand](https://github.com/pmndrs/zustand)
+- **Language**: TypeScript
+
+## ✨ Key Features
+
+- **Modern Shopping Experience**: A fully responsive, beautifully designed frontend catalog with filtering, sorting, and persistent shopping carts.
+- **Secure Authentication**: User sign-up, login, and protected routes handled seamlessly by Supabase.
+- **Automated Payments**: Integrated Stripe Checkout with webhook listeners for order fulfillment and receipt generation.
+- **Admin Dashboard**: A secure internal portal for store managers to add products, track inventory, upload images to Supabase Storage, and review customer orders.
+- **SEO Optimized**: Metadata and semantic HTML implemented out of the box.
+
+## 🛠️ Local Development
+
+Follow these steps to run the AfriBite platform locally on your machine.
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/reneineza/afribite-web.git
+cd afribite-web
+```
+
+### 2. Install dependencies
+```bash
+npm install
+```
+
+### 3. Set up environment variables
+Create a `.env.local` file in the root directory and add your Supabase and Stripe keys:
+
+```env
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+
+# Stripe
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
+STRIPE_SECRET_KEY=your_stripe_secret_key
+STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
+```
+
+### 4. Run the development server
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🗄️ Database Schema
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The `database_schema.sql` file located in the root directory contains the full PostgreSQL schema used by the application. You can execute this script directly in your Supabase SQL Editor to instantly provision your tables, Row Level Security (RLS) policies, and storage buckets.
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+*Designed and built for the love of authentic flavors.*
