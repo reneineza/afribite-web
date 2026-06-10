@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import Stripe from 'stripe'
+import { createClient } from '@supabase/supabase-js'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
   apiVersion: '2025-02-24.acacia',
@@ -30,11 +31,29 @@ export async function POST(req: Request) {
       const session = event.data.object as Stripe.Checkout.Session
       console.log('Payment successful for session:', session.id)
       
-      // In a real app, you would:
-      // 1. Initialize Supabase Admin client (using service_role_key)
-      // 2. Insert the order into the `orders` table
-      // 3. Clear the user's cart (handled on client side usually or via API)
-      // 4. Send confirmation email (e.g. via Resend)
+      const orderId = session.metadata?.order_id
+      if (orderId) {
+        // Initialize Supabase Admin client to bypass RLS in the webhook
+        const supabaseAdmin = createClient(
+          process.env.NEXT_PUBLIC_SUPABASE_URL!,
+          process.env.SUPABASE_SERVICE_ROLE_KEY!
+        )
+        
+        const { error } = await supabaseAdmin.from('orders').update({
+          status: 'paid',
+          stripe_payment_intent_id: session.payment_intent as string
+        }).eq('id', orderId)
+
+        if (error) {
+          console.error('Failed to update order status:', error)
+        } else {
+          console.log(`Successfully marked order ${orderId} as paid.`)
+        }
+      }
+      
+      // In a real app, you would also:
+      // - Clear the user's cart
+      // - Send confirmation email (e.g. via Resend)
       break
     
     default:

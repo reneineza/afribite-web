@@ -5,26 +5,21 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Separator } from '@/components/ui/separator'
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb'
 
-// Mock fetching function for MVP
+import { createClient } from '@/lib/supabase/server'
+
 async function getProduct(slug: string) {
-  const products = [
-    { 
-      id: '1', 
-      name: 'Premium Jollof Rice Spice Mix', 
-      slug: 'jollof-spice', 
-      price: 12.99, 
-      comparison_price: 15.99, 
-      images: ['https://images.unsplash.com/photo-1596040033229-a9821ebd058d?q=80&w=600&auto=format&fit=crop'], 
-      rating: 4.8, 
-      reviews_count: 124,
-      description: 'Authentic Nigerian Jollof Rice spice blend. Made with the finest sun-dried tomatoes, roasted bell peppers, and traditional West African herbs. Perfect for achieving that signature smoky party jollof taste.',
-      ingredients: 'Dried Tomatoes, Red Bell Peppers, Onion Powder, Garlic Powder, Thyme, Curry Powder, Bay Leaves, Ginger, Salt.',
-      origin_country: 'Nigeria',
-      stock_quantity: 50,
-      nutrition_info: { calories: 15, carbs: '3g', protein: '1g', fat: '0g' }
-    }
-  ]
-  return products.find(p => p.slug === slug) || null
+  const supabase = await createClient()
+  const { data: product, error } = await supabase
+    .from('products')
+    .select('*')
+    .eq('slug', slug)
+    .single()
+
+  if (error) {
+    console.error('Failed to fetch product:', error)
+    return null
+  }
+  return product
 }
 
 export default async function ProductDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -58,7 +53,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
         <div className="flex flex-col gap-4">
           <div className="aspect-square relative overflow-hidden rounded-lg bg-muted border border-border">
             <img 
-              src={product.images[0]} 
+              src={product.images && product.images.length > 0 ? product.images[0] : 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?q=80&w=600&auto=format&fit=crop'} 
               alt={product.name} 
               className="w-full h-full object-cover"
             />
@@ -131,19 +126,19 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                <div className="grid grid-cols-2 gap-4 text-sm">
                  <div className="flex flex-col p-4 bg-muted rounded-md border border-border">
                    <span className="text-muted-foreground">Calories</span>
-                   <span className="font-medium text-lg text-foreground">{product.nutrition_info.calories}</span>
+                   <span className="font-medium text-lg text-foreground">{product.nutrition_info?.calories || '-'}</span>
                  </div>
                  <div className="flex flex-col p-4 bg-muted rounded-md border border-border">
                    <span className="text-muted-foreground">Carbs</span>
-                   <span className="font-medium text-lg text-foreground">{product.nutrition_info.carbs}</span>
+                   <span className="font-medium text-lg text-foreground">{product.nutrition_info?.carbs || '-'}</span>
                  </div>
                  <div className="flex flex-col p-4 bg-muted rounded-md border border-border">
                    <span className="text-muted-foreground">Protein</span>
-                   <span className="font-medium text-lg text-foreground">{product.nutrition_info.protein}</span>
+                   <span className="font-medium text-lg text-foreground">{product.nutrition_info?.protein || '-'}</span>
                  </div>
                  <div className="flex flex-col p-4 bg-muted rounded-md border border-border">
                    <span className="text-muted-foreground">Fat</span>
-                   <span className="font-medium text-lg text-foreground">{product.nutrition_info.fat}</span>
+                   <span className="font-medium text-lg text-foreground">{product.nutrition_info?.fat || '-'}</span>
                  </div>
                </div>
             </TabsContent>

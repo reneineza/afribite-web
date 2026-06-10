@@ -27,32 +27,91 @@ export async function createCheckoutSession(formData: FormData) {
   }
 
   const cartItems = JSON.parse(cartDataString)
+  if (cartItems.length === 0) redirect('/cart')
 
-  const lineItems = cartItems.map((item: { product: { name: string; images: string[]; price: number }, quantity: number }) => ({
-    price_data: {
-      currency: 'cad',
-      product_data: {
-        name: item.product.name,
-        images: [item.product.images[0]],
+  // 1. Fetch real product data from Supabase to prevent price tampering
+  const productIds = cartItems.map((item: any) => item.product.id)
+  const { data: dbProducts, error: dbError } = await supabase
+    .from('products')
+    .select('id, name, price, images')
+    .in('id', productIds)
+
+  if (dbError || !dbProducts) {
+    console.error('Failed to fetch products for checkout:', dbError)
+    redirect('/checkout?error=Validation_Failed')
+  }
+
+  let subtotal = 0
+  const lineItems: any[] = []
+  const orderItemsData: any[] = []
+
+  // 2. Calculate true totals
+  for (const item of cartItems) {
+    const dbProduct = dbProducts.find((p) => p.id === item.product.id)
+    if (!dbProduct) continue
+
+    const itemTotal = dbProduct.price * item.quantity
+    subtotal += itemTotal
+
+    lineItems.push({
+      price_data: {
+        currency: 'cad',
+        product_data: {
+          name: dbProduct.name,
+          images: dbProduct.images && dbProduct.images.length > 0 ? [dbProduct.images[0]] : [],
+        },
+        unit_amount: Math.round(dbProduct.price * 100),
       },
-      unit_amount: Math.round(item.product.price * 100), // convert to cents
-    },
-    quantity: item.quantity,
-  }))
+      quantity: item.quantity,
+    })
 
-  // Add Shipping (Mock logic based on country)
-  const shippingCost = country === 'CA' ? 0 : (country === 'US' ? 1999 : 3999)
+    orderItemsData.push({
+      product_id: dbProduct.id,
+      quantity: item.quantity,
+      price_at_purchase: dbProduct.price,
+    })
+  }
+
+  // 3. Shipping
+  const shippingCost = country === 'CA' ? 0 : (country === 'US' ? 19.99 : 39.99)
   if (shippingCost > 0) {
     lineItems.push({
       price_data: {
         currency: 'cad',
         product_data: { name: 'Flat Rate Shipping' },
-        unit_amount: shippingCost,
+        unit_amount: Math.round(shippingCost * 100),
       },
       quantity: 1,
     })
   }
 
+  const total = subtotal + shippingCost
+
+  // 4. Create Pending Order in Supabase
+  const shippingAddress = { full_name: fullName, line1, city, province, postal_code, country }
+  const { data: orderData, error: orderError } = await supabase
+    .from('orders')
+    .insert({
+      profile_id: user?.id || null,
+      status: 'pending',
+      shipping_address: shippingAddress,
+      shipping_rate: shippingCost,
+      subtotal,
+      total
+    })
+    .select('id')
+    .single()
+
+  if (orderError || !orderData) {
+    console.error('Failed to create pending order:', orderError)
+    redirect('/checkout?error=Order_Creation_Failed')
+  }
+
+  // Insert Order Items
+  const orderItemsToInsert = orderItemsData.map(oi => ({ ...oi, order_id: orderData.id }))
+  await supabase.from('order_items').insert(orderItemsToInsert)
+
+  // 5. Create Stripe Session
   try {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -62,13 +121,8 @@ export async function createCheckoutSession(formData: FormData) {
       cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/cart`,
       customer_email: email,
       metadata: {
-        shipping_name: fullName,
-        shipping_line1: line1,
-        shipping_city: city,
-        shipping_province: province,
-        shipping_postal_code: postal_code,
-        shipping_country: country,
-        // user_id: user?.id || 'guest',
+        order_id: orderData.id,
+        customer_email: email,
       }
     })
 
