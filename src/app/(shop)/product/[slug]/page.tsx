@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Separator } from '@/components/ui/separator'
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb'
+import { ReviewForm } from './ReviewForm'
 
 import { createClient } from '@/lib/supabase/server'
 
@@ -29,6 +30,18 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   if (!product) {
     notFound()
   }
+
+  const supabase = await createClient()
+  const { data: reviews } = await supabase
+    .from('reviews')
+    .select('*, profiles(full_name, email)')
+    .eq('product_id', product.id)
+    .order('created_at', { ascending: false })
+
+  const averageRating = reviews?.length 
+    ? (reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length).toFixed(1) 
+    : 'New'
+  const reviewCount = reviews?.length || 0
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -68,8 +81,9 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
           <h1 className="text-3xl font-bold tracking-tight text-foreground">{product.name}</h1>
           
           <div className="flex items-center gap-2 mt-2">
-            <div className="flex text-accent text-lg">★★★★★</div>
-            <span className="text-sm text-muted-foreground">{product.rating} ({product.reviews_count} reviews)</span>
+            <div className="flex text-accent text-lg">★</div>
+            <span className="text-sm font-medium text-foreground">{averageRating}</span>
+            <span className="text-sm text-muted-foreground">({reviewCount} reviews)</span>
           </div>
 
           <div className="flex items-baseline gap-4 mt-4">
@@ -108,10 +122,11 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
           </div>
 
           <Tabs defaultValue="description" className="mt-10">
-            <TabsList className="w-full justify-start border-b rounded-none h-auto p-0 bg-transparent">
+            <TabsList className="w-full justify-start border-b rounded-none h-auto p-0 bg-transparent overflow-x-auto">
               <TabsTrigger value="description" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none data-[state=active]:bg-transparent py-3 px-4">Description</TabsTrigger>
               <TabsTrigger value="ingredients" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none data-[state=active]:bg-transparent py-3 px-4">Ingredients</TabsTrigger>
               <TabsTrigger value="nutrition" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none data-[state=active]:bg-transparent py-3 px-4">Nutrition</TabsTrigger>
+              <TabsTrigger value="reviews" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none data-[state=active]:bg-transparent py-3 px-4">Reviews ({reviewCount})</TabsTrigger>
             </TabsList>
             <TabsContent value="description" className="pt-4 text-muted-foreground">
               {product.description}
@@ -141,6 +156,28 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                    <span className="font-medium text-lg text-foreground">{product.nutrition_info?.fat || '-'}</span>
                  </div>
                </div>
+            </TabsContent>
+            <TabsContent value="reviews" className="pt-4">
+              <div className="space-y-6">
+                {reviews?.map((review: any) => (
+                  <div key={review.id} className="border-b border-border pb-4">
+                    <div className="flex justify-between items-start mb-2">
+                      <div>
+                        <p className="font-semibold text-foreground">{review.profiles?.full_name || review.profiles?.email || 'Verified Buyer'}</p>
+                        <p className="text-sm text-muted-foreground">{new Date(review.created_at).toLocaleDateString()}</p>
+                      </div>
+                      <div className="text-accent text-lg flex tracking-tighter">
+                        {'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}
+                      </div>
+                    </div>
+                    <p className="text-foreground mt-2">{review.comment}</p>
+                  </div>
+                ))}
+                {(!reviews || reviews.length === 0) && (
+                  <p className="text-muted-foreground">No reviews yet. Be the first to review this product!</p>
+                )}
+              </div>
+              <ReviewForm productId={product.id} slug={product.slug} />
             </TabsContent>
           </Tabs>
 

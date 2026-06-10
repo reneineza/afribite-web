@@ -1,18 +1,22 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Badge } from '@/components/ui/badge'
+import { Search, ExternalLink } from 'lucide-react'
+import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Eye, Search } from 'lucide-react'
+import { createClient } from '@/lib/supabase/server'
+import { OrderStatusSelect } from './OrderStatusSelect'
 
-const MOCK_ORDERS = [
-  { id: 'ORD-001', customer: 'John Doe', date: '2026-06-10', total: 145.50, status: 'Processing' },
-  { id: 'ORD-002', customer: 'Sarah Smith', date: '2026-06-09', total: 89.99, status: 'Shipped' },
-  { id: 'ORD-003', customer: 'Michael Johnson', date: '2026-06-08', total: 210.00, status: 'Delivered' },
-  { id: 'ORD-004', customer: 'Emily Davis', date: '2026-06-07', total: 45.25, status: 'Cancelled' },
-]
+export default async function AdminOrdersPage() {
+  const supabase = await createClient()
 
-export default function AdminOrdersPage() {
+  const { data: orders, error } = await supabase
+    .from('orders')
+    .select('*, profiles(email)')
+    .order('created_at', { ascending: false })
+
+  if (error) {
+    console.error('Failed to load orders:', error)
+  }
   return (
     <div className="space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -34,36 +38,37 @@ export default function AdminOrdersPage() {
             <TableHeader>
               <TableRow>
                 <TableHead>Order ID</TableHead>
-                <TableHead>Customer</TableHead>
                 <TableHead>Date</TableHead>
+                <TableHead>Customer</TableHead>
+                <TableHead>Total</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead className="text-right">Total</TableHead>
                 <TableHead className="w-[100px] text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {MOCK_ORDERS.map((order) => (
+              {orders?.map((order) => (
                 <TableRow key={order.id}>
-                  <TableCell className="font-medium">{order.id}</TableCell>
-                  <TableCell>{order.customer}</TableCell>
-                  <TableCell>{order.date}</TableCell>
+                  <TableCell className="font-mono text-xs uppercase">{order.id.split('-')[0]}</TableCell>
+                  <TableCell>{new Date(order.created_at).toLocaleDateString()}</TableCell>
+                  <TableCell>{order.shipping_address?.full_name || order.profiles?.email || 'Guest'}</TableCell>
+                  <TableCell>${order.total.toFixed(2)}</TableCell>
                   <TableCell>
-                    <Badge variant={
-                      order.status === 'Delivered' ? 'default' : 
-                      order.status === 'Processing' ? 'secondary' : 
-                      order.status === 'Cancelled' ? 'destructive' : 'outline'
-                    }>
-                      {order.status}
-                    </Badge>
+                    <OrderStatusSelect orderId={order.id} currentStatus={order.status} />
                   </TableCell>
-                  <TableCell className="text-right">${order.total.toFixed(2)}</TableCell>
                   <TableCell className="text-right">
                     <Button variant="ghost" size="icon">
-                      <Eye className="h-4 w-4" />
+                      <ExternalLink className="h-4 w-4" />
                     </Button>
                   </TableCell>
                 </TableRow>
               ))}
+              {(!orders || orders.length === 0) && (
+                <TableRow>
+                  <TableCell colSpan={6} className="h-24 text-center text-muted-foreground">
+                    No orders found.
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </CardContent>
