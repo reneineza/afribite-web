@@ -26,6 +26,18 @@ export default async function CatalogPage(props: {
     query = query.lte('price', parseFloat(searchParams.max))
   }
 
+  // Category Filtering
+  const selectedCategories = searchParams?.category
+  if (selectedCategories) {
+    const categorySlugs = Array.isArray(selectedCategories) ? selectedCategories : [selectedCategories]
+    
+    const { data: matchedCats } = await supabase.from('categories').select('id').in('slug', categorySlugs)
+    if (matchedCats && matchedCats.length > 0) {
+      const catIds = matchedCats.map(c => c.id)
+      query = query.in('category_id', catIds)
+    }
+  }
+
   // Sorting
   const sort = typeof searchParams?.sort === 'string' ? searchParams.sort : 'newest'
   if (sort === 'price-low') {
@@ -37,9 +49,12 @@ export default async function CatalogPage(props: {
   }
 
   const { data: products, error } = await query
+  
+  // Fetch categories for sidebar
+  const { data: dbCategories } = await supabase.from('categories').select('*').order('name')
 
   if (error) {
-    console.error("Error fetching products:", error)
+    console.error('Error fetching products:', error)
   }
 
   return (
@@ -48,7 +63,7 @@ export default async function CatalogPage(props: {
         
         {/* Sidebar Filters */}
         <aside className="w-full md:w-64 shrink-0">
-          <CatalogFilters />
+          <CatalogFilters dbCategories={dbCategories || []} />
         </aside>
 
         {/* Main Content */}

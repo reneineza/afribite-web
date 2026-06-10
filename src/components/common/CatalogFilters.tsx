@@ -10,7 +10,7 @@ import { useState } from 'react'
 
 const CATEGORIES = ['Spices & Seasonings', 'Grains & Flours', 'Beans & Legumes', 'Oils', 'Snacks']
 
-export function CatalogFilters() {
+export function CatalogFilters({ dbCategories = [] }: { dbCategories?: any[] }) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -79,7 +79,18 @@ export function CatalogFilters() {
         <AccordionItem value="categories">
           <AccordionTrigger className="text-foreground">Categories</AccordionTrigger>
           <AccordionContent className="space-y-3">
-            {CATEGORIES.map((category) => (
+            {dbCategories.length > 0 ? dbCategories.map((category) => (
+              <div key={category.id} className="flex items-center space-x-2">
+                <Checkbox 
+                  id={`cat-${category.slug}`} 
+                  checked={currentCategories.includes(category.slug)}
+                  onCheckedChange={(checked) => handleCategoryChange(category.slug, checked as boolean)}
+                />
+                <Label htmlFor={`cat-${category.slug}`} className="font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                  {category.name}
+                </Label>
+              </div>
+            )) : CATEGORIES.map((category) => (
               <div key={category} className="flex items-center space-x-2">
                 <Checkbox 
                   id={`cat-${category}`} 

@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { WishlistButton } from '@/components/common/WishlistButton'
 
 export interface Product {
   id: string
@@ -34,6 +35,7 @@ export function ProductCard({ product }: ProductCardProps) {
           {product.comparison_price && product.comparison_price > product.price && (
             <Badge className="absolute top-2 left-2 bg-destructive text-destructive-foreground">Sale</Badge>
           )}
+          <WishlistButton productId={product.id} />
         </CardHeader>
         <CardContent className="p-4 flex flex-col gap-1">
           <h3 className="font-semibold text-lg line-clamp-1 group-hover:text-primary transition-colors">{product.name}</h3>
