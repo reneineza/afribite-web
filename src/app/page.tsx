@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 
 export default function Home() {
   const categories = [
@@ -34,12 +35,12 @@ export default function Home() {
             Your premier destination for premium spices, fresh ingredients, and authentic African groceries in Canada.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-            <Button asChild size="lg" className="text-lg px-8 py-6 h-auto bg-primary hover:bg-primary/90 text-primary-foreground">
-              <Link href="/catalog">Shop the Catalog</Link>
-            </Button>
-            <Button asChild variant="outline" size="lg" className="text-lg px-8 py-6 h-auto border-primary text-primary hover:bg-primary/10">
-              <Link href="/login">Sign In</Link>
-            </Button>
+            <Link href="/catalog" className={cn(buttonVariants({ size: "lg" }), "text-lg px-8 py-6 h-auto bg-primary hover:bg-primary/90 text-primary-foreground")}>
+              Shop the Catalog
+            </Link>
+            <Link href="/login" className={cn(buttonVariants({ variant: "outline", size: "lg" }), "text-lg px-8 py-6 h-auto border-primary text-primary hover:bg-primary/10")}>
+              Sign In
+            </Link>
           </div>
         </div>
       </section>

@@ -4,22 +4,29 @@ import { Input } from '@/components/ui/input'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Plus, Search, Edit, Trash2 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
+import Link from 'next/link'
+import { buttonVariants } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
+import { createClient } from '@/lib/supabase/server'
 
-const MOCK_PRODUCTS = [
-  { id: '1', name: 'Premium Jollof Rice Spice Mix', price: 12.99, stock: 50, status: 'Active' },
-  { id: '2', name: 'Dried Crayfish (Ground)', price: 18.50, stock: 12, status: 'Active' },
-  { id: '3', name: 'Pounded Yam Flour (Iyan)', price: 24.99, stock: 0, status: 'Out of Stock' },
-  { id: '4', name: 'Nigerian Red Palm Oil', price: 14.00, stock: 124, status: 'Active' },
-]
+export default async function AdminProductsPage() {
+  const supabase = await createClient()
+  const { data: products, error } = await supabase
+    .from('products')
+    .select('*')
+    .order('created_at', { ascending: false })
 
-export default function AdminProductsPage() {
+  if (error) {
+    console.error('Failed to load products:', error)
+  }
+
   return (
     <div className="space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <h1 className="text-3xl font-bold tracking-tight">Products</h1>
-        <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
+        <Link href="/admin/products/new" className={cn(buttonVariants(), "bg-primary hover:bg-primary/90 text-primary-foreground")}>
           <Plus className="h-4 w-4 mr-2" /> Add Product
-        </Button>
+        </Link>
       </div>
 
       <Card>
@@ -44,15 +51,15 @@ export default function AdminProductsPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {MOCK_PRODUCTS.map((product) => (
+              {products?.map((product) => (
                 <TableRow key={product.id}>
                   <TableCell className="font-medium">{product.name}</TableCell>
                   <TableCell>
-                    <Badge variant={product.status === 'Active' ? 'default' : 'destructive'}>
-                      {product.status}
+                    <Badge variant={product.is_active ? 'default' : 'destructive'}>
+                      {product.is_active ? 'Active' : 'Inactive'}
                     </Badge>
                   </TableCell>
-                  <TableCell>{product.stock} in stock</TableCell>
+                  <TableCell>{product.stock_quantity} in stock</TableCell>
                   <TableCell className="text-right">${product.price.toFixed(2)}</TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
@@ -66,6 +73,13 @@ export default function AdminProductsPage() {
                   </TableCell>
                 </TableRow>
               ))}
+              {(!products || products.length === 0) && (
+                <TableRow>
+                  <TableCell colSpan={5} className="h-24 text-center text-muted-foreground">
+                    No products found. Add your first product!
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </CardContent>
