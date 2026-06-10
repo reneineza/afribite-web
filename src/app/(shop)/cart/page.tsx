@@ -1,7 +1,8 @@
 'use client'
 
 import { useCartStore } from '@/store/useCartStore'
-import { Button } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
@@ -26,9 +27,9 @@ export default function CartPage() {
       <div className="container mx-auto px-4 py-16 flex flex-col items-center justify-center text-center">
         <h1 className="text-3xl font-bold mb-4">Your Cart is Empty</h1>
         <p className="text-muted-foreground mb-8">Looks like you haven&apos;t added anything to your cart yet.</p>
-        <Button asChild size="lg">
-          <Link href="/catalog">Start Shopping</Link>
-        </Button>
+        <Link href="/catalog" className={cn(buttonVariants({ size: "lg" }))}>
+          Start Shopping
+        </Link>
       </div>
     )
   }
@@ -110,9 +111,9 @@ export default function CartPage() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button size="lg" className="w-full" asChild>
-                <Link href="/checkout">Proceed to Checkout</Link>
-              </Button>
+              <Link href="/checkout" className={cn(buttonVariants({ size: "lg" }), "w-full")}>
+                Proceed to Checkout
+              </Link>
             </CardFooter>
           </Card>
         </div>
