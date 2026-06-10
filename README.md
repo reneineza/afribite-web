@@ -2,8 +2,6 @@
 
 AfriBite is a premier, full-stack e-commerce marketplace tailored for authentic African groceries, spices, snacks, and specialty ingredients. Built with modern web technologies, it offers a seamless shopping experience for the African diaspora across Canada.
 
-![AfriBite Overview](https://images.unsplash.com/photo-1596040033229-a9821ebd058d?q=80&w=1200&auto=format&fit=crop)
-
 ## 🚀 Tech Stack
 
 - **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
