@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 import Link from 'next/link'
-import { LayoutDashboard, Package, ShoppingCart, Users, Settings } from 'lucide-react'
+import { LayoutDashboard, Package, ShoppingCart, Users, Settings, MessageSquare, ChefHat } from 'lucide-react'
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
   return (
@@ -26,6 +26,14 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           <Link href="/admin/customers" className="flex items-center gap-3 px-3 py-2 text-sidebar-foreground hover:bg-sidebar-accent rounded-md transition-colors">
             <Users className="h-5 w-5 text-sidebar-primary" />
             Customers
+          </Link>
+          <Link href="/admin/recipes" className="flex items-center gap-3 px-3 py-2 text-sidebar-foreground hover:bg-sidebar-accent rounded-md transition-colors">
+            <ChefHat className="h-5 w-5 text-sidebar-primary" />
+            Recipes
+          </Link>
+          <Link href="/admin/messages" className="flex items-center gap-3 px-3 py-2 text-sidebar-foreground hover:bg-sidebar-accent rounded-md transition-colors">
+            <MessageSquare className="h-5 w-5 text-sidebar-primary" />
+            Messages
           </Link>
         </nav>
         <div className="p-4 border-t border-sidebar-border">

@@ -86,7 +86,7 @@ export default async function AccountPage() {
                   {(!orders || orders.length === 0) && (
                     <TableRow>
                       <TableCell colSpan={4} className="h-32 text-center text-muted-foreground">
-                        You haven't placed any orders yet.
+                        You haven&apos;t placed any orders yet.
                       </TableCell>
                     </TableRow>
                   )}

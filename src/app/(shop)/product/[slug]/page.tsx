@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Separator } from '@/components/ui/separator'
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb'
 import { ReviewForm } from './ReviewForm'
+import { AddToCart } from '@/components/common/AddToCart'
 
 import { createClient } from '@/lib/supabase/server'
 
@@ -110,14 +111,19 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
              </div>
              
              <div className="flex gap-4 mt-4">
-               <div className="flex items-center border border-input rounded-md px-3 bg-background">
-                 <button className="px-3 py-2 hover:text-primary transition-colors">-</button>
-                 <span className="px-4 font-medium text-foreground">1</span>
-                 <button className="px-3 py-2 hover:text-primary transition-colors">+</button>
-               </div>
-               <Button size="lg" className="flex-1 text-lg h-12 bg-primary hover:bg-primary/90 text-primary-foreground">
-                 Add to Cart
-               </Button>
+               <AddToCart 
+                 product={{
+                   id: product.id,
+                   name: product.name,
+                   slug: product.slug,
+                   price: product.price,
+                   comparison_price: product.comparison_price,
+                   images: product.images || [],
+                   rating: Number(averageRating) || 0,
+                   reviews_count: reviewCount
+                 }} 
+                 stockQuantity={product.stock_quantity} 
+               />
              </div>
           </div>
 

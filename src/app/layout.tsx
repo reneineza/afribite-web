@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Script from "next/script";
@@ -25,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" suppressHydrationWarning>
       <head>
         {/* Google Analytics */}
         <Script
@@ -41,8 +43,13 @@ export default function RootLayout({
           `}
         </Script>
       </head>
+
       <body className={`${inter.className} antialiased min-h-screen bg-background text-foreground flex flex-col`}>
-        {children}
+        <Header />
+        <main className="grow flex flex-col">
+          {children}
+        </main>
+        <Footer />
       </body>
     </html>
   );

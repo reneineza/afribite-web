@@ -226,7 +226,7 @@ create policy "Allow admins to manage shipping zones" on public.shipping_zones
 insert into public.shipping_zones (zone_name, country_code, is_free, flat_rate, estimated_delivery_days) values
   ('Canada', 'CA', true, 0.00, '3-7 business days'),
   ('United States', 'US', false, 19.99, '7-14 business days'),
-  ('Rest of World', 'INT', false, 39.99, '14-21 business days');
+  ('Rest of World', 'RW', false, 39.99, '14-21 business days');
 
 -- WISHLISTS
 create table public.wishlists (
@@ -291,3 +291,80 @@ create trigger on_auth_user_created
 --   (bucket_id = 'product-images' and exists (
 --     select 1 from public.profiles where profiles.id = auth.uid() and profiles.role = 'admin'
 --   ))
+
+-- RECIPES
+create table public.recipes (
+  id uuid default gen_random_uuid() primary key,
+  title text not null,
+  slug text unique not null,
+  content text not null,
+  image_url text,
+  cooking_time text,
+  difficulty text,
+  is_published boolean default true,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+alter table public.recipes enable row level security;
+
+create policy "Allow public read of published recipes" on public.recipes
+  for select using (is_published = true or exists (
+    select 1 from public.profiles where profiles.id = auth.uid() and profiles.role = 'admin'
+  ));
+
+create policy "Allow admins to manage recipes" on public.recipes
+  for all using (
+    exists (
+      select 1 from public.profiles
+      where profiles.id = auth.uid() and profiles.role = 'admin'
+    )
+  );
+
+-- WHOLESALE APPLICATIONS
+create table public.wholesale_applications (
+  id uuid default gen_random_uuid() primary key,
+  business_name text not null,
+  contact_name text not null,
+  email text not null,
+  phone text,
+  details text,
+  status text default 'pending' check (status in ('pending', 'reviewed', 'approved', 'rejected')),
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+alter table public.wholesale_applications enable row level security;
+
+create policy "Allow admins to manage wholesale applications" on public.wholesale_applications
+  for all using (
+    exists (
+      select 1 from public.profiles
+      where profiles.id = auth.uid() and profiles.role = 'admin'
+    )
+  );
+  
+create policy "Allow public to insert wholesale applications" on public.wholesale_applications
+  for insert with check (true);
+
+-- CONTACT MESSAGES
+create table public.contact_messages (
+  id uuid default gen_random_uuid() primary key,
+  name text not null,
+  email text not null,
+  subject text not null,
+  message text not null,
+  status text default 'unread' check (status in ('unread', 'read', 'replied')),
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+alter table public.contact_messages enable row level security;
+
+create policy "Allow admins to manage contact messages" on public.contact_messages
+  for all using (
+    exists (
+      select 1 from public.profiles
+      where profiles.id = auth.uid() and profiles.role = 'admin'
+    )
+  );
+  
+create policy "Allow public to insert contact messages" on public.contact_messages
+  for insert with check (true);
