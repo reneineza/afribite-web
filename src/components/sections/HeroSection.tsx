@@ -101,13 +101,7 @@ export function HeroSection() {
         background: "radial-gradient(ellipse at 80% 50%, #1b3f2a 0%, #0e2018 40%, #080f0b 100%)",
       }}
     >
-      {/* ── Background Pattern ── */}
-      <div
-        className="absolute inset-0 opacity-[0.025] pointer-events-none"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff'%3E%3Cpath d='M50 50v-8h-4v8h-8v4h8v8h4v-8h8v-4h-8zm0-40V2h-4v8h-8v4h8v8h4V14h8v-4h-8zM10 50v-8H6v8H-2v4h8v8h4v-8h8v-4h-8zM10 10V2H6v8H-2v4h8v8h4V14h8v-4h-8z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-        }}
-      />
+
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-10 py-28 flex flex-col lg:flex-row items-center gap-16">
         
