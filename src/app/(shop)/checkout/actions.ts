@@ -30,7 +30,7 @@ export async function createCheckoutSession(formData: FormData) {
   if (cartItems.length === 0) redirect('/cart')
 
   // 1. Fetch real product data from Supabase to prevent price tampering
-  const productIds = cartItems.map((item: any) => item.product.id)
+  const productIds = cartItems.map((item: { product: { id: string } }) => item.product.id)
   const { data: dbProducts, error: dbError } = await supabase
     .from('products')
     .select('id, name, price, images')
@@ -42,8 +42,8 @@ export async function createCheckoutSession(formData: FormData) {
   }
 
   let subtotal = 0
-  const lineItems: any[] = []
-  const orderItemsData: any[] = []
+  const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = []
+  const orderItemsData: { product_id: string, quantity: number, price_at_purchase: number }[] = []
 
   // 2. Calculate true totals
   for (const item of cartItems) {

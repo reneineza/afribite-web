@@ -1,4 +1,4 @@
-import { ProductCard } from '@/components/common/ProductCard'
+import { ProductCard, type Product } from '@/components/common/ProductCard'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
 import { CatalogFilters } from '@/components/common/CatalogFilters'
@@ -88,10 +88,9 @@ export default async function CatalogPage(props: {
           
           <Separator className="mb-6" />
 
-          {/* Product Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {products?.map(product => (
-              <ProductCard key={product.id} product={product as any} />
+              <ProductCard key={product.id} product={product as Product} />
             ))}
           </div>
           

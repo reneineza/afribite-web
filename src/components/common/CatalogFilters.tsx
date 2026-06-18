@@ -10,7 +10,7 @@ import { useState } from 'react'
 
 const CATEGORIES = ['Spices & Seasonings', 'Grains & Flours', 'Beans & Legumes', 'Oils', 'Snacks']
 
-export function CatalogFilters({ dbCategories = [] }: { dbCategories?: any[] }) {
+export function CatalogFilters({ dbCategories = [] }: { dbCategories?: { id: string, slug: string, name: string }[] }) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()

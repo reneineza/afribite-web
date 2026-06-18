@@ -19,8 +19,8 @@ export function ReviewForm({ productId, slug }: { productId: string, slug: strin
         await submitReview(productId, rating, comment, slug)
         setComment('') // Clear form on success
         setRating(5)
-      } catch (err: any) {
-        setError(err.message || 'An error occurred while submitting your review.')
+      } catch (err: unknown) {
+        setError((err as Error).message || 'An error occurred while submitting your review.')
       }
     })
   }

@@ -165,7 +165,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
             </TabsContent>
             <TabsContent value="reviews" className="pt-4">
               <div className="space-y-6">
-                {reviews?.map((review: any) => (
+                {reviews?.map((review: { id: string, created_at: string, rating: number, comment: string, profiles: { full_name: string, email: string } }) => (
                   <div key={review.id} className="border-b border-border pb-4">
                     <div className="flex justify-between items-start mb-2">
                       <div>

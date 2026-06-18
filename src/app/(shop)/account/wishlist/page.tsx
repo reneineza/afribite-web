@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import { ProductCard } from '@/components/common/ProductCard'
+import { ProductCard, type Product } from '@/components/common/ProductCard'
 
 export default async function WishlistPage() {
   const supabase = await createClient()
@@ -35,7 +35,7 @@ export default async function WishlistPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {products.map((product: any) => (
+          {products.map((product: Product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>

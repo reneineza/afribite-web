@@ -40,7 +40,7 @@ export default function ContactPage() {
       <div className="text-center max-w-2xl mx-auto mb-16">
         <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">Contact Us</h1>
         <p className="text-lg text-muted-foreground">
-          Have a question about your order, a product, or just want to say hello? We'd love to hear from you.
+          Have a question about your order, a product, or just want to say hello? We&apos;d love to hear from you.
         </p>
       </div>
 

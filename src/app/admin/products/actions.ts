@@ -29,7 +29,7 @@ export async function createProduct(formData: FormData) {
   const slug = `${baseSlug}-${Date.now().toString().slice(-4)}`
   const sku = `PRD-${Date.now().toString().slice(-6)}`
 
-  let images: string[] = []
+  const images: string[] = []
 
   // 3. Upload Image to Supabase Storage if provided
   if (imageFile && imageFile.size > 0) {

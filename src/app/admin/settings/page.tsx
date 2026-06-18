@@ -12,7 +12,7 @@ export default function AdminSettingsPage() {
         <Card>
           <CardHeader>
             <CardTitle>Store Details</CardTitle>
-            <CardDescription>Manage your store's public information.</CardDescription>
+            <CardDescription>Manage your store&apos;s public information.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
