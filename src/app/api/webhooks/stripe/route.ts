@@ -2,7 +2,8 @@ import { NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { createClient } from '@supabase/supabase-js'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
+// Initialize Stripe with placeholder key for build to pass
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string || 'sk_test_placeholder', {
   apiVersion: '2026-05-27.dahlia',
 })
 
