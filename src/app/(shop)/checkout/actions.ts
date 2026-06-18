@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase/server'
 
 // Initialize Stripe with placeholder key for MVP development
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string || 'sk_test_placeholder', {
-  apiVersion: '2025-02-24.acacia',
+  apiVersion: '2026-05-27.dahlia',
 })
 
 export async function createCheckoutSession(formData: FormData) {
