@@ -1,8 +1,13 @@
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-
+// Initialize Resend only if the API key is present to prevent crashes
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 export async function sendOrderConfirmation(email: string, orderId: string, totalAmount: number) {
+  if (!resend) {
+    console.warn('RESEND_API_KEY is not set. Skipping order confirmation email.');
+    return { success: false, error: 'RESEND_API_KEY is missing' };
+  }
+
   try {
     const data = await resend.emails.send({
       from: 'AfriBite Orders <orders@afribite.ca>',

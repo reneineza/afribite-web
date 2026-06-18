@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { createClient } from '@supabase/supabase-js'
-
+import { sendOrderConfirmation } from '@/lib/email'
 // Initialize Stripe with placeholder key for build to pass
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string || 'sk_test_placeholder', {
   apiVersion: '2026-05-27.dahlia',
@@ -54,7 +54,12 @@ export async function POST(req: Request) {
       
       // In a real app, you would also:
       // - Clear the user's cart
-      // - Send confirmation email (e.g. via Resend)
+      // Send confirmation email via Resend
+      const customerEmail = session.customer_details?.email || session.metadata?.customer_email
+      if (orderId && customerEmail) {
+        const totalAmount = session.amount_total ? session.amount_total / 100 : 0
+        await sendOrderConfirmation(customerEmail, orderId, totalAmount)
+      }
       break
     
     default:
