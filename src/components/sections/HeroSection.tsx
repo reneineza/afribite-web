@@ -211,7 +211,7 @@ export function HeroSection() {
           </motion.div>
 
           <motion.div {...fadeUp(1.2)} className="flex flex-wrap gap-8">
-            {STATS.map(({ value, label, icon: Icon }, i) => (
+            {STATS.map(({ value, label, icon: Icon }) => (
               <motion.div key={label} className="flex items-center gap-3" whileHover={{ scale: 1.05 }}>
                 <div className="w-12 h-12 rounded-full flex items-center justify-center shrink-0 bg-primary/10 border border-primary/30">
                   <Icon className="w-5 h-5 text-primary" />
