@@ -75,7 +75,7 @@ export function CatalogFilters({ dbCategories = [] }: { dbCategories?: { id: str
         </div>
       </div>
 
-      <Accordion type="multiple" defaultValue={["categories", "price"]} className="w-full">
+      <Accordion defaultValue={["categories", "price"]} className="w-full">
         <AccordionItem value="categories">
           <AccordionTrigger className="text-foreground">Categories</AccordionTrigger>
           <AccordionContent className="space-y-3">

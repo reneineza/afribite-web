@@ -5,9 +5,29 @@ import { createClient } from "@/lib/supabase/client"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
+interface ContactMessage {
+  id: string;
+  subject: string;
+  name: string;
+  email: string;
+  message: string;
+  created_at: string;
+}
+
+interface WholesaleApplication {
+  id: string;
+  business_name: string;
+  contact_name: string;
+  email: string;
+  phone: string;
+  status: string;
+  details: string;
+  created_at: string;
+}
+
 export default function AdminMessagesPage() {
-  const [contacts, setContacts] = useState<Record<string, unknown>[]>([])
-  const [wholesale, setWholesale] = useState<Record<string, unknown>[]>([])
+  const [contacts, setContacts] = useState<ContactMessage[]>([])
+  const [wholesale, setWholesale] = useState<WholesaleApplication[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {

@@ -8,12 +8,15 @@ import { toast } from 'sonner'
 export function OrderStatusSelect({ orderId, currentStatus }: { orderId: string, currentStatus: string }) {
   const [isPending, startTransition] = useTransition()
 
-  const handleStatusChange = (newStatus: string) => {
+  const handleStatusChange = (newStatus: string | null) => {
+    if (!newStatus) return;
     startTransition(async () => {
       try {
         await updateOrderStatus(orderId, newStatus)
+        toast.success('Order status updated')
       } catch (error) {
         console.error(error)
+        toast.error('Failed to update status')
       }
     })
   }

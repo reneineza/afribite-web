@@ -7,8 +7,20 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Trash2 } from "lucide-react"
 
+interface Recipe {
+  id: string;
+  title: string;
+  slug: string;
+  content: string;
+  image_url?: string | null;
+  cooking_time?: string | null;
+  difficulty?: string | null;
+  is_published: boolean;
+  created_at?: string;
+}
+
 export default function AdminRecipesPage() {
-  const [recipes, setRecipes] = useState<Record<string, unknown>[]>([])
+  const [recipes, setRecipes] = useState<Recipe[]>([])
   const [loading, setLoading] = useState(true)
   const [isAdding, setIsAdding] = useState(false)
 

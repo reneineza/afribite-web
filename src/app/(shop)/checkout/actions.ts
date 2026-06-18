@@ -122,7 +122,7 @@ export async function createCheckoutSession(formData: FormData) {
       customer_email: email,
       metadata: {
         order_id: orderData.id,
-        customer_email: email,
+        customer_email: email || '',
       }
     })
 
