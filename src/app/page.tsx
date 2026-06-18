@@ -1,10 +1,11 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { buttonVariants } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
-import { ShieldCheck, Truck, Leaf, ArrowRight } from 'lucide-react'
-import { ProductCard } from '@/components/common/ProductCard'
+import { ArrowRight } from 'lucide-react'
+import { ProductCard, type Product } from '@/components/common/ProductCard'
 import { createClient } from '@/lib/supabase/server'
+import { HeroSection } from '@/components/sections/HeroSection'
+import { BenefitsSection } from '@/components/sections/BenefitsSection'
 
 // Mock Data
 const categories = [
@@ -23,67 +24,10 @@ export default async function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero Section */}
-      <section className="relative h-[85vh] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <Image 
-            src="https://images.unsplash.com/photo-1574484284002-952d92456975?q=80&w=2000&auto=format&fit=crop" 
-            alt="African Food Ingredients" 
-            fill
-            className="object-cover"
-          />
-          <div className="absolute inset-0 bg-black/60 md:bg-black/50 backdrop-blur-[2px]"></div>
-        </div>
-
-        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto flex flex-col items-center mt-16 animate-fade-in">
-          <Badge className="mb-6 bg-primary/20 text-primary-foreground hover:bg-primary/30 text-sm px-4 py-1 border border-primary/50 backdrop-blur-md">
-            Now Shipping Across Canada 🇨🇦
-          </Badge>
-          <h1 className="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-6 drop-shadow-lg">
-            Authentic African Flavors, <br />
-            <span className="text-primary">Delivered to You.</span>
-          </h1>
-          <p className="text-xl md:text-2xl text-slate-200 mb-10 max-w-2xl drop-shadow-md">
-            Your premier destination for premium spices, fresh ingredients, and authentic African groceries.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-            <Link href="/catalog" className={cn(buttonVariants({ size: "lg" }), "text-lg px-8 py-6 h-auto bg-primary hover:bg-primary/90 text-primary-foreground shadow-xl hover:scale-105 transition-transform")}>
-              Shop the Catalog <ArrowRight className="ml-2 w-5 h-5" />
-            </Link>
-            <Link href="/login" className={cn(buttonVariants({ variant: "outline", size: "lg" }), "text-lg px-8 py-6 h-auto border-white text-white hover:bg-white/20 backdrop-blur-sm")}>
-              Sign In
-            </Link>
-          </div>
-        </div>
-      </section>
+      <HeroSection />
 
       {/* Benefits Section */}
-      <section className="py-16 bg-background border-b border-border">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center divide-y md:divide-y-0 md:divide-x divide-border">
-            <div className="flex flex-col items-center p-6 space-y-4">
-              <div className="p-4 bg-primary/10 rounded-full text-primary">
-                <Leaf className="w-8 h-8" />
-              </div>
-              <h3 className="text-xl font-bold">Authentic Sourcing</h3>
-              <p className="text-muted-foreground">Direct from the continent to ensure premium quality and authentic taste.</p>
-            </div>
-            <div className="flex flex-col items-center p-6 space-y-4">
-              <div className="p-4 bg-primary/10 rounded-full text-primary">
-                <Truck className="w-8 h-8" />
-              </div>
-              <h3 className="text-xl font-bold">Fast Shipping</h3>
-              <p className="text-muted-foreground">Reliable and fast delivery across Canada, straight to your doorstep.</p>
-            </div>
-            <div className="flex flex-col items-center p-6 space-y-4">
-              <div className="p-4 bg-primary/10 rounded-full text-primary">
-                <ShieldCheck className="w-8 h-8" />
-              </div>
-              <h3 className="text-xl font-bold">Quality Guaranteed</h3>
-              <p className="text-muted-foreground">We carefully vet all our products to guarantee satisfaction.</p>
-            </div>
-          </div>
-        </div>
-      </section>
+      <BenefitsSection />
 
       {/* Featured Categories */}
       <section className="py-24 bg-muted/20">
@@ -125,7 +69,7 @@ export default async function Home() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {featuredProducts?.map((product) => (
-              <ProductCard key={product.id} product={product as any} />
+              <ProductCard key={product.id} product={product as Product} />
             ))}
           </div>
           <div className="mt-8 text-center md:hidden">
@@ -167,10 +111,4 @@ export default async function Home() {
   )
 }
 
-function Badge({ children, className }: { children: React.ReactNode, className?: string }) {
-  return (
-    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ${className}`}>
-      {children}
-    </span>
-  )
-}
+
