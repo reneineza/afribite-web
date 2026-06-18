@@ -2,6 +2,7 @@
 
 import { useCartStore } from '@/store/useCartStore'
 import { createCheckoutSession } from './actions'
+import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -57,7 +58,7 @@ export default function CheckoutPage() {
 
                 <div className="space-y-2">
                   <Label>Country</Label>
-                  <Select value={country} onValueChange={setCountry}>
+                  <Select value={country} onValueChange={(val) => val && setCountry(val)}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select Country" />
                     </SelectTrigger>
@@ -107,7 +108,7 @@ export default function CheckoutPage() {
                 {cart.items.map((item) => (
                   <div key={item.product.id} className="flex gap-4">
                     <div className="h-16 w-16 bg-muted rounded overflow-hidden shrink-0 border border-border relative">
-                      <img src={item.product.images[0]} alt={item.product.name} className="w-full h-full object-cover" />
+                      <Image src={item.product.images[0]} alt={item.product.name} fill sizes="64px" className="object-cover" />
                       <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
                         {item.quantity}
                       </span>
