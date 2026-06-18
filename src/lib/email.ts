@@ -10,7 +10,7 @@ export async function sendOrderConfirmation(email: string, orderId: string, tota
 
   try {
     const data = await resend.emails.send({
-      from: 'AfriBite Orders <orders@afribite.ca>',
+      from: 'AfriBite Orders <onboarding@resend.dev>',
       to: [email],
       subject: `Order Confirmation - #${orderId}`,
       html: `
