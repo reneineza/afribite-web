@@ -57,7 +57,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-foreground">Our Headquarters</h3>
-                  <p className="text-muted-foreground mt-1">123 African Market Way<br />Toronto, ON M5V 2H1<br />Canada</p>
+                  <a href="https://maps.app.goo.gl/zEGS7GMnPHH2eMKS9?g_st=iw" target="_blank" rel="noopener noreferrer" className="text-muted-foreground mt-1 hover:text-primary transition-colors block">206 Rue Antoinette-Robidoux<br />Longueuil, QC J4J 2V3<br />Canada</a>
                 </div>
               </div>
               
@@ -67,7 +67,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-foreground">Phone</h3>
-                  <p className="text-muted-foreground mt-1">+1 (555) 123-4567</p>
+                  <p className="text-muted-foreground mt-1">+250789284564</p>
                 </div>
               </div>
               
@@ -77,7 +77,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-foreground">Email</h3>
-                  <p className="text-muted-foreground mt-1">support@afribite.ca</p>
+                  <p className="text-muted-foreground mt-1">info@afribite.com</p>
                 </div>
               </div>
 

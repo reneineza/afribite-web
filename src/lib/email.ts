@@ -1,3 +1,6 @@
+
+
+
 import { Resend } from 'resend'
 
 // Initialize Resend only if the API key is present to prevent crashes

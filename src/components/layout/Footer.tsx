@@ -102,15 +102,17 @@ export function Footer() {
             <ul className="space-y-4">
               <li className="flex items-start gap-3 text-sm text-muted-foreground">
                 <MapPin className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                <span>123 Market Street, Suite 400<br/>Toronto, ON M5V 2H1</span>
+                <a href="https://maps.app.goo.gl/zEGS7GMnPHH2eMKS9?g_st=iw" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
+                  206 Rue Antoinette-Robidoux<br/>Longueuil, QC J4J 2V3
+                </a>
               </li>
               <li className="flex items-center gap-3 text-sm text-muted-foreground">
                 <Phone className="h-5 w-5 text-primary shrink-0" />
-                <span>+1 (800) 123-4567</span>
+                <span>+250789284564</span>
               </li>
               <li className="flex items-center gap-3 text-sm text-muted-foreground">
                 <Mail className="h-5 w-5 text-primary shrink-0" />
-                <span>hello@afribite.ca</span>
+                <span>info@afribite.com</span>
               </li>
             </ul>
             

@@ -81,8 +81,8 @@ export default function WholesalePage() {
 
               <div className="bg-muted p-6 rounded-xl border border-border mt-8">
                 <h4 className="font-bold text-foreground mb-2">Direct Inquiries</h4>
-                <p className="text-muted-foreground mb-1">Email: <a href="mailto:wholesale@afribite.ca" className="text-primary hover:underline">wholesale@afribite.ca</a></p>
-                <p className="text-muted-foreground">Phone: +1 (555) 123-4567 (Mon-Fri, 9am-5pm EST)</p>
+                <p className="text-muted-foreground mb-1">Email: <a href="mailto:info@afribite.com" className="text-primary hover:underline">info@afribite.com</a></p>
+                <p className="text-muted-foreground">Phone: +250789284564 (Mon-Fri, 9am-5pm)</p>
               </div>
             </div>
 

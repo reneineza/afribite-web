@@ -102,7 +102,6 @@ export function HeroSection() {
       }}
     >
 
-
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-10 py-28 flex flex-col lg:flex-row items-center gap-16">
         
         {/* ── Left Column: Text & CTAs ── */}
@@ -205,7 +204,7 @@ export function HeroSection() {
           </motion.div>
 
           <motion.div {...fadeUp(1.2)} className="flex flex-wrap gap-8">
-            {STATS.map(({ value, label, icon: Icon }) => (
+            {STATS.map(({ value, label, icon: Icon }, i) => (
               <motion.div key={label} className="flex items-center gap-3" whileHover={{ scale: 1.05 }}>
                 <div className="w-12 h-12 rounded-full flex items-center justify-center shrink-0 bg-primary/10 border border-primary/30">
                   <Icon className="w-5 h-5 text-primary" />
@@ -220,7 +219,7 @@ export function HeroSection() {
         </div>
 
         {/* ── Right Column: 3D Orbit Visual ── */}
-        <div className="flex-1 relative w-full aspect-square max-w-[600px] mx-auto lg:mr-0 flex items-center justify-center">
+        <div className="flex-1 relative w-full aspect-square max-w-[800px] mx-auto lg:mr-[-100px] flex items-center justify-center">
           
           {/* Main Circular Backgrounds (Static) */}
           <div className="absolute inset-0 rounded-full border border-white/5 scale-[0.85]" />
@@ -260,7 +259,7 @@ export function HeroSection() {
                 className="absolute top-1/2 left-1/2"
                 style={{
                   // Position the items in a circle
-                  transform: `translate(-50%, -50%) rotate(${item.angle}deg) translateY(-260px)`,
+                  transform: `translate(-50%, -50%) rotate(${item.angle}deg) translateY(-320px)`,
                 }}
               >
                 <motion.div
@@ -274,15 +273,24 @@ export function HeroSection() {
                   <div style={{ transform: `rotate(${-item.angle}deg)` }}>
                     <Link href={`/product/${item.slug}`}>
                       <motion.div 
-                        whileHover={{ scale: 1.1, y: -5 }}
-                        className="flex items-center gap-4 p-3 pr-6 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 shadow-xl cursor-pointer group"
+                        whileHover={{ scale: 1.05, y: -8, boxShadow: "0 25px 50px -12px rgba(237,89,31,0.3)" }}
+                        className="flex flex-col w-[160px] overflow-hidden rounded-2xl bg-[#080f0b]/80 backdrop-blur-xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] cursor-pointer group transition-all duration-300"
                       >
-                        <div className="relative w-16 h-16 rounded-xl overflow-hidden shrink-0">
-                          <Image src={item.image} alt={item.name} fill className="object-cover group-hover:scale-110 transition-transform duration-300" />
+                        <div className="relative w-full aspect-square overflow-hidden bg-white/5 border-b border-white/10">
+                          <Image src={item.image} alt={item.name} fill className="object-cover group-hover:scale-110 transition-transform duration-500" />
+                          <div className="absolute top-2 right-2 bg-black/60 backdrop-blur-md p-1.5 rounded-full border border-white/20 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <ArrowRight className="w-3 h-3 text-white group-hover:text-[#ed591f] transition-colors" />
+                          </div>
                         </div>
-                        <div className="flex flex-col">
-                          <span className="text-white font-bold text-base leading-tight">{item.name}</span>
-                          <span className="text-primary font-semibold text-sm">{item.price}</span>
+                        <div className="p-3.5 flex flex-col gap-1">
+                          <span className="text-white font-bold text-sm leading-tight line-clamp-1">{item.name}</span>
+                          <div className="flex justify-between items-center mt-0.5">
+                            <span className="text-[#ed591f] font-extrabold text-sm">{item.price}</span>
+                            <div className="flex items-center text-[#C8A45D]">
+                              <Star className="w-3 h-3 fill-current" />
+                              <span className="ml-1 text-white/70 text-[10px] font-medium">5.0</span>
+                            </div>
+                          </div>
                         </div>
                       </motion.div>
                     </Link>
