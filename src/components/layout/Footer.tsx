@@ -24,37 +24,41 @@ const TwitterIcon = ({ className }: { className?: string }) => (
 
 export function Footer() {
   return (
-    <footer className="bg-background relative border-t border-border/50 mt-auto overflow-hidden">
-      {/* Decorative gradient background */}
-      <div className="absolute inset-0 pointer-events-none bg-linear-to-b from-transparent to-primary/5 opacity-50"></div>
+    <footer className="relative mt-auto overflow-hidden bg-background border-t border-primary/10">
+      {/* Very subtle elegant background gradient overlay */}
+      <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent to-primary/[0.03]"></div>
       
-      <div className="container relative mx-auto px-4 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8 mb-16">
+      <div className="container relative mx-auto px-4 py-20 z-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-16 lg:gap-8 mb-20">
           {/* Brand & Newsletter Column */}
           <div className="col-span-1 md:col-span-2 lg:col-span-4">
             <Link href="/" className="inline-block mb-6 group">
-              <Image src="/logo.png" alt="AfriBite Logo" width={180} height={48} className="h-12 w-auto object-contain transition-all duration-300 group-hover:opacity-80" />
+              <div className="relative">
+                <Image src="/afribite-official.png" alt="AfriBite Logo" width={180} height={48} className="h-12 w-auto object-contain transition-all duration-300 group-hover:scale-[1.02]" />
+              </div>
             </Link>
-            <p className="text-muted-foreground text-base leading-relaxed mb-8 max-w-sm">
+            <p className="text-foreground/70 text-sm leading-relaxed mb-8 max-w-sm">
               Your premier destination for authentic African groceries, spices, snacks, and specialty ingredients in Canada. Bringing the taste of home right to your doorstep.
             </p>
             
             {/* Newsletter Subscription */}
-            <div className="space-y-3">
-              <h4 className="text-sm font-semibold text-foreground flex items-center gap-2">
-                <Mail className="h-4 w-4 text-primary" />
-                Subscribe to our newsletter
+            <div className="space-y-4">
+              <h4 className="text-sm font-bold text-primary flex items-center gap-2 tracking-wide uppercase">
+                <Mail className="h-4 w-4 text-secondary" />
+                Join our newsletter
               </h4>
-              <div className="flex max-w-md">
-                <input 
-                  type="email" 
-                  placeholder="Enter your email" 
-                  className="flex-1 min-w-0 bg-muted/50 border border-border/50 rounded-l-md px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-primary transition-all"
-                />
-                <button className="bg-primary text-primary-foreground px-4 py-2.5 rounded-r-md text-sm font-medium hover:bg-primary/90 transition-colors flex items-center gap-1 group">
-                  Subscribe
-                  <ArrowRight className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform" />
-                </button>
+              <div className="flex max-w-md relative group shadow-sm rounded-lg hover:shadow-md transition-shadow duration-300">
+                <div className="relative flex w-full">
+                  <input 
+                    type="email" 
+                    placeholder="Enter your email address" 
+                    className="flex-1 min-w-0 bg-white border border-primary/10 border-r-0 rounded-l-lg px-5 py-3 text-sm text-foreground placeholder-foreground/40 focus:outline-none focus:border-primary/30 transition-all"
+                  />
+                  <button className="bg-secondary text-primary-foreground px-6 py-3 rounded-r-lg text-sm font-bold hover:bg-secondary/90 transition-colors flex items-center gap-2 group/btn">
+                    Subscribe
+                    <ArrowRight className="h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -64,15 +68,16 @@ export function Footer() {
 
           {/* Shop Column */}
           <div className="lg:col-span-2">
-            <h3 className="text-base font-semibold mb-6 text-foreground tracking-wide">Shop</h3>
+            <h3 className="text-base font-bold mb-6 text-foreground tracking-wide uppercase">Shop</h3>
             <ul className="space-y-4">
               {['Catalog', 'Categories', 'Deals', 'New Arrivals'].map((item) => (
                 <li key={item}>
                   <Link 
                     href={`/${item.toLowerCase().replace(' ', '-')}`} 
-                    className="text-muted-foreground text-sm hover:text-primary transition-all duration-200 hover:translate-x-1 inline-block"
+                    className="text-foreground/70 text-sm hover:text-primary transition-all duration-300 flex items-center group relative w-fit font-medium"
                   >
-                    {item}
+                    <span className="w-0 h-[2px] bg-secondary absolute left-0 -bottom-1 transition-all duration-300 group-hover:w-full"></span>
+                    <span className="group-hover:translate-x-1 transition-transform duration-300 inline-block">{item}</span>
                   </Link>
                 </li>
               ))}
@@ -81,15 +86,16 @@ export function Footer() {
 
           {/* Support Column */}
           <div className="lg:col-span-2">
-            <h3 className="text-base font-semibold mb-6 text-foreground tracking-wide">Support</h3>
+            <h3 className="text-base font-bold mb-6 text-foreground tracking-wide uppercase">Support</h3>
             <ul className="space-y-4">
               {['FAQ', 'Shipping Policy', 'Returns', 'Contact Us'].map((item) => (
                 <li key={item}>
                   <Link 
                     href={`/${item.split(' ')[0].toLowerCase()}`} 
-                    className="text-muted-foreground text-sm hover:text-primary transition-all duration-200 hover:translate-x-1 inline-block"
+                    className="text-foreground/70 text-sm hover:text-primary transition-all duration-300 flex items-center group relative w-fit font-medium"
                   >
-                    {item}
+                    <span className="w-0 h-[2px] bg-secondary absolute left-0 -bottom-1 transition-all duration-300 group-hover:w-full"></span>
+                    <span className="group-hover:translate-x-1 transition-transform duration-300 inline-block">{item}</span>
                   </Link>
                 </li>
               ))}
@@ -98,53 +104,70 @@ export function Footer() {
 
           {/* Contact Column */}
           <div className="lg:col-span-3">
-            <h3 className="text-base font-semibold mb-6 text-foreground tracking-wide">Get In Touch</h3>
-            <ul className="space-y-4">
-              <li className="flex items-start gap-3 text-sm text-muted-foreground">
-                <MapPin className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                <a href="https://maps.app.goo.gl/zEGS7GMnPHH2eMKS9?g_st=iw" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
-                  206 Rue Antoinette-Robidoux<br/>Longueuil, QC J4J 2V3
+            <h3 className="text-base font-bold mb-6 text-foreground tracking-wide uppercase">Get In Touch</h3>
+            <ul className="space-y-5">
+              <li>
+                <a href="https://maps.app.goo.gl/zEGS7GMnPHH2eMKS9?g_st=iw" target="_blank" rel="noopener noreferrer" className="flex items-start gap-4 text-sm text-foreground/70 hover:text-primary transition-colors group font-medium">
+                  <div className="h-10 w-10 rounded-full bg-white flex items-center justify-center shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors border border-primary/10 shadow-sm">
+                    <MapPin className="h-4 w-4 text-primary group-hover:text-primary-foreground" />
+                  </div>
+                  <span className="mt-1">206 Rue Antoinette-Robidoux<br/>Longueuil, QC J4J 2V3</span>
                 </a>
               </li>
-              <li className="flex items-center gap-3 text-sm text-muted-foreground">
-                <Phone className="h-5 w-5 text-primary shrink-0" />
-                <span>+250789284564</span>
+              <li>
+                <a href="tel:+1250789284564" className="flex items-center gap-4 text-sm text-foreground/70 hover:text-primary transition-colors group font-medium">
+                  <div className="h-10 w-10 rounded-full bg-white flex items-center justify-center shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors border border-primary/10 shadow-sm">
+                    <Phone className="h-4 w-4 text-primary group-hover:text-primary-foreground" />
+                  </div>
+                  <span>+1 (250) 789-2845</span>
+                </a>
               </li>
-              <li className="flex items-center gap-3 text-sm text-muted-foreground">
-                <Mail className="h-5 w-5 text-primary shrink-0" />
-                <span>info@afribite.com</span>
+              <li>
+                <a href="mailto:info@afribite.com" className="flex items-center gap-4 text-sm text-foreground/70 hover:text-primary transition-colors group font-medium">
+                  <div className="h-10 w-10 rounded-full bg-white flex items-center justify-center shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors border border-primary/10 shadow-sm">
+                    <Mail className="h-4 w-4 text-primary group-hover:text-primary-foreground" />
+                  </div>
+                  <span>info@afribite.com</span>
+                </a>
               </li>
             </ul>
             
             <div className="flex space-x-4 mt-8">
-              <a href="#" className="h-10 w-10 bg-muted/50 rounded-full flex items-center justify-center text-muted-foreground hover:bg-primary hover:text-primary-foreground hover:-translate-y-1 transition-all duration-300">
-                <FacebookIcon className="h-5 w-5" />
-                <span className="sr-only">Facebook</span>
-              </a>
-              <a href="#" className="h-10 w-10 bg-muted/50 rounded-full flex items-center justify-center text-muted-foreground hover:bg-primary hover:text-primary-foreground hover:-translate-y-1 transition-all duration-300">
-                <InstagramIcon className="h-5 w-5" />
-                <span className="sr-only">Instagram</span>
-              </a>
-              <a href="#" className="h-10 w-10 bg-muted/50 rounded-full flex items-center justify-center text-muted-foreground hover:bg-primary hover:text-primary-foreground hover:-translate-y-1 transition-all duration-300">
-                <TwitterIcon className="h-5 w-5" />
-                <span className="sr-only">Twitter</span>
-              </a>
+              {[
+                { icon: FacebookIcon, label: 'Facebook' },
+                { icon: InstagramIcon, label: 'Instagram' },
+                { icon: TwitterIcon, label: 'Twitter' }
+              ].map((social) => (
+                <a 
+                  key={social.label} 
+                  href="#" 
+                  className="relative group h-12 w-12 flex items-center justify-center"
+                >
+                  <div className="relative h-10 w-10 bg-white border border-primary/10 rounded-full flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300 group-hover:-translate-y-1 shadow-sm">
+                    <social.icon className="h-4 w-4" />
+                    <span className="sr-only">{social.label}</span>
+                  </div>
+                </a>
+              ))}
             </div>
           </div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-border/50 flex flex-col md:flex-row items-center justify-between gap-6">
-          <p className="text-muted-foreground text-sm text-center md:text-left">
+        <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-6 border-t border-primary/10">
+          <p className="text-foreground/60 text-sm text-center md:text-left font-medium">
             © {new Date().getFullYear()} AfriBite Canada. All rights reserved.
           </p>
           
           {/* Payment Badges */}
-          <div className="flex items-center flex-wrap justify-center gap-3">
-            <span className="text-xs text-muted-foreground/70 uppercase tracking-wider font-medium">Secure Checkout</span>
-            <div className="flex space-x-2">
+          <div className="flex items-center flex-wrap justify-center gap-4">
+            <span className="text-xs text-foreground/50 uppercase tracking-widest font-bold mr-2">Secure Checkout</span>
+            <div className="flex space-x-3">
               {['STRIPE', 'VISA', 'MASTERCARD', 'AMEX'].map((badge) => (
-                <div key={badge} className="bg-background px-3 py-1.5 rounded text-[10px] font-bold text-muted-foreground shadow-sm border border-border flex items-center hover:border-primary/30 transition-colors">
+                <div 
+                  key={badge} 
+                  className="bg-white px-3 py-1.5 rounded text-[10px] font-bold text-foreground/70 shadow-sm border border-primary/10 flex items-center hover:border-primary/30 transition-colors"
+                >
                   {badge}
                 </div>
               ))}

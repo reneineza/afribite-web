@@ -103,7 +103,7 @@ export function Header() {
         </div>
         <div className="flex items-center space-x-6 font-medium">
           <Link href="/contact" className="hover:text-secondary transition-colors">Help Center</Link>
-          <Link href="/account/orders" className="hover:text-secondary transition-colors">Order Tracking</Link>
+          <Link href="/track-order" className="hover:text-secondary transition-colors">Order Tracking</Link>
         </div>
       </div>
 
@@ -156,8 +156,8 @@ export function Header() {
                     <Link href="/account" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center hover:text-primary transition-colors py-2">
                       <User className="h-5 w-5 mr-3 text-muted-foreground" /> Profile
                     </Link>
-                    <Link href="/account/orders" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center hover:text-primary transition-colors py-2">
-                      <Package className="h-5 w-5 mr-3 text-muted-foreground" /> Orders
+                    <Link href="/track-order" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center hover:text-primary transition-colors py-2">
+                      <Package className="h-5 w-5 mr-3 text-muted-foreground" /> Track Order
                     </Link>
                     <Link href="/account/wishlist" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center hover:text-primary transition-colors py-2">
                       <Heart className="h-5 w-5 mr-3 text-muted-foreground" /> Wishlist
@@ -229,8 +229,8 @@ export function Header() {
                     <DropdownMenuItem onClick={() => router.push("/account")} className="flex items-center cursor-pointer">
                       <User className="h-4 w-4 mr-2" /> My Account
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => router.push("/account/orders")} className="flex items-center cursor-pointer">
-                      <Package className="h-4 w-4 mr-2" /> My Orders
+                    <DropdownMenuItem onClick={() => router.push("/track-order")} className="flex items-center cursor-pointer">
+                      <Package className="h-4 w-4 mr-2" /> Track Order
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => router.push("/account/wishlist")} className="flex items-center cursor-pointer">
                       <Heart className="h-4 w-4 mr-2" /> My Wishlist
