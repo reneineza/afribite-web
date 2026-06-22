@@ -223,7 +223,9 @@ export function Header() {
                   <ChevronDown className="h-3 w-3 opacity-70" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-48 mt-2 rounded-sm border border-primary/20">
-                  <DropdownMenuLabel className="text-xs text-muted-foreground truncate">{user.email}</DropdownMenuLabel>
+                  <DropdownMenuGroup>
+                    <DropdownMenuLabel className="text-xs text-muted-foreground truncate">{user.email}</DropdownMenuLabel>
+                  </DropdownMenuGroup>
                   <DropdownMenuSeparator />
                   <DropdownMenuGroup>
                     <DropdownMenuItem onClick={() => router.push("/account")} className="flex items-center cursor-pointer">
