@@ -55,7 +55,7 @@ export function Header() {
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (searchQuery.trim()) {
-      router.push(`/catalog?q=${encodeURIComponent(searchQuery)}`)
+      router.push(`/shop?q=${encodeURIComponent(searchQuery)}`)
       setIsMobileMenuOpen(false)
     }
   }
@@ -145,8 +145,8 @@ export function Header() {
 
                 <div className="flex-1 overflow-y-auto pr-4 -mr-4">
                   <nav className="flex flex-col space-y-4 text-base font-medium">
-                    <Link href="/catalog" onClick={() => setIsMobileMenuOpen(false)} className={mobileLinkClass("/catalog")}>Shop</Link>
-                    <Link href="/recipes" onClick={() => setIsMobileMenuOpen(false)} className={mobileLinkClass("/recipes")}>Recipes</Link>
+                    <Link href="/shop" onClick={() => setIsMobileMenuOpen(false)} className={mobileLinkClass("/shop")}>Shop</Link>
+                    <Link href="/recipes" onClick={() => setIsMobileMenuOpen(false)} className={mobileLinkClass("/recipes")}>Recipes</Link>>
                     <Link href="/about" onClick={() => setIsMobileMenuOpen(false)} className={mobileLinkClass("/about")}>About Us</Link>
                     <Link href="/wholesale" onClick={() => setIsMobileMenuOpen(false)} className={mobileLinkClass("/wholesale")}>Wholesale</Link>
                     <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)} className={mobileLinkClass("/contact")}>Contact</Link>
@@ -295,7 +295,7 @@ export function Header() {
 
           <nav className="flex items-center h-full ml-4">
             <Link href="/" className={navLinkClass("/")}>Home</Link>
-            <Link href="/catalog" className={navLinkClass("/catalog")}>Shop</Link>
+            <Link href="/shop" className={navLinkClass("/shop")}>Shop</Link>
             <Link href="/recipes" className={navLinkClass("/recipes")}>Recipes</Link>
             <Link href="/about" className={navLinkClass("/about")}>About Us</Link>
             <Link href="/wholesale" className={navLinkClass("/wholesale")}>Wholesale</Link>

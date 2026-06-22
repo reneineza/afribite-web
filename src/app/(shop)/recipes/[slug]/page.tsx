@@ -99,7 +99,7 @@ export default async function RecipeDetailPage({ params }: { params: Promise<{ s
               <h3 className="text-xl font-bold text-foreground mb-2">Need ingredients?</h3>
               <p className="text-muted-foreground">Shop our authentic African spices and staples to make this dish perfect.</p>
             </div>
-            <Link href="/catalog">
+            <Link href="/shop">
               <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground whitespace-nowrap">
                 Shop Ingredients
               </Button>

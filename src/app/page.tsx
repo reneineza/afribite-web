@@ -38,7 +38,7 @@ export default async function Home() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {categories.map((category, index) => (
-              <Link key={index} href="/catalog" className="group relative overflow-hidden rounded-2xl aspect-4/3 bg-muted shadow-lg border border-border/50">
+              <Link key={index} href="/shop" className="group relative overflow-hidden rounded-2xl aspect-4/3 bg-muted shadow-lg border border-border/50">
                 <Image 
                   src={category.image} 
                   alt={category.name} 
@@ -62,7 +62,7 @@ export default async function Home() {
               <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-2">Featured Products</h2>
               <p className="text-muted-foreground text-lg">Our most loved authentic ingredients.</p>
             </div>
-            <Link href="/catalog" className="hidden md:flex items-center text-primary hover:text-primary/80 font-medium">
+            <Link href="/shop" className="hidden md:flex items-center text-primary hover:text-primary/80 font-medium">
               View All <ArrowRight className="ml-1 w-4 h-4" />
             </Link>
           </div>
@@ -73,7 +73,7 @@ export default async function Home() {
             ))}
           </div>
           <div className="mt-8 text-center md:hidden">
-             <Link href="/catalog" className={buttonVariants({ variant: "outline", className: "w-full" })}>
+             <Link href="/shop" className={buttonVariants({ variant: "outline", className: "w-full" })}>
               View All Products
             </Link>
           </div>

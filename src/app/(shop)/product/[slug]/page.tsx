@@ -53,7 +53,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbLink href="/catalog">Catalog</BreadcrumbLink>
+            <BreadcrumbLink href="/shop">Shop</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>

@@ -76,6 +76,6 @@ export async function createProduct(formData: FormData) {
 
   // 5. Revalidate cache and redirect
   revalidatePath('/admin/products')
-  revalidatePath('/catalog')
+  revalidatePath('/shop')
   redirect('/admin/products')
 }

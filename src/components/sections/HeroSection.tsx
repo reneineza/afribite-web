@@ -181,7 +181,7 @@ export function HeroSection() {
           </motion.p>
 
           <motion.div {...fadeUp(1.0)} className="flex flex-col sm:flex-row gap-4 mb-14">
-            <Link href="/catalog">
+            <Link href="/shop">
               <motion.span
                 className="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-full text-base font-bold text-white cursor-pointer shadow-[0_8px_30px_rgba(237,89,31,0.35)]"
                 style={{ background: "linear-gradient(135deg, #ed591f 0%, #b53c0e 100%)" }}

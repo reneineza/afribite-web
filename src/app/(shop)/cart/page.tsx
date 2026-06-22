@@ -27,8 +27,8 @@ export default function CartPage() {
       <div className="container mx-auto px-4 py-16 flex flex-col items-center justify-center text-center">
         <h1 className="text-3xl font-bold mb-4">Your Cart is Empty</h1>
         <p className="text-muted-foreground mb-8">Looks like you haven&apos;t added anything to your cart yet.</p>
-        <Link href="/catalog" className={cn(buttonVariants({ size: "lg" }))}>
-          Start Shopping
+        <Link href="/shop" className={cn(buttonVariants({ size: "lg" }))}>
+          Continue Shopping
         </Link>
       </div>
     )

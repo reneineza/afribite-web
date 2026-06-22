@@ -82,9 +82,9 @@ export default function AboutPage() {
           <p className="text-xl opacity-90 mb-8 max-w-2xl mx-auto">
             Browse our catalog of authentic spices, flours, snacks, and more.
           </p>
-          <Link href="/catalog">
-            <Button size="lg" className="bg-white text-primary hover:bg-gray-100 text-lg px-8 py-6 h-auto">
-              Shop Now
+          <Link href="/shop">
+            <Button size="lg" className="bg-primary text-white hover:bg-primary/90 px-8 py-6 text-lg rounded-full">
+              Shop Authentic Flavors
             </Button>
           </Link>
         </div>

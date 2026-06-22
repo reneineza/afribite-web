@@ -115,11 +115,11 @@ export function Footer() {
                 </a>
               </li>
               <li>
-                <a href="tel:+1250789284564" className="flex items-center gap-4 text-sm text-foreground/70 hover:text-primary transition-colors group font-medium">
+                <a href="tel:+250789284564" className="flex items-center gap-4 text-sm text-foreground/70 hover:text-primary transition-colors group font-medium">
                   <div className="h-10 w-10 rounded-full bg-white flex items-center justify-center shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors border border-primary/10 shadow-sm">
                     <Phone className="h-4 w-4 text-primary group-hover:text-primary-foreground" />
                   </div>
-                  <span>+1 (250) 789-2845</span>
+                  <span>+250 789 284 564</span>
                 </a>
               </li>
               <li>

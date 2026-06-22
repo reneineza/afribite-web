@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
+import { headers } from 'next/headers'
 import { createClient } from '@/lib/supabase/server'
 
 export async function login(formData: FormData) {
@@ -41,4 +42,28 @@ export async function signup(formData: FormData) {
 
   revalidatePath('/', 'layout')
   redirect('/dashboard')
+}
+
+export async function signInWithGoogle() {
+  const supabase = await createClient()
+  
+  // Use headers to get the correct host dynamically, since we might be on port 3001
+  const originList = await headers()
+  const origin = originList.get('origin') || process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+  
+  // This will return a URL from Supabase that redirects the user to Google for consent
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: `${origin}/auth/callback`,
+    },
+  })
+
+  if (error) {
+    redirect('/signup?message=Could not initiate Google login')
+  }
+
+  if (data.url) {
+    redirect(data.url)
+  }
 }
