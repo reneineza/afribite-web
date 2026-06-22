@@ -61,7 +61,7 @@ export default async function TrackOrderPage({
         .eq('order_id', orderId)
       
       if (itemsData) {
-        orderItems = itemsData
+        orderItems = itemsData as unknown as OrderItemType[]
       }
     }
   }
