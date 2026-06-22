@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -22,7 +22,15 @@ export default async function TrackOrderPage({
   const orderId = Array.isArray(orderIdParam) ? orderIdParam[0] : orderIdParam
 
   let order = null
-  let orderItems: any[] = []
+  type OrderItemType = {
+    quantity: number
+    price_at_purchase: number
+    product: {
+      name: string
+      images: string[]
+    } | null
+  }
+  let orderItems: OrderItemType[] = []
   let errorMsg = ''
 
   if (orderId) {
@@ -163,7 +171,7 @@ export default async function TrackOrderPage({
                 <div>
                   <h3 className="text-lg font-semibold mb-4 text-foreground border-b pb-2">Order Items</h3>
                   <div className="space-y-4">
-                    {orderItems.map((item: any, idx: number) => (
+                    {orderItems.map((item: OrderItemType, idx: number) => (
                       <div key={idx} className="flex items-center gap-4">
                         <div className="h-16 w-16 bg-muted rounded overflow-hidden shrink-0 border border-border relative">
                           {item.product?.images?.[0] ? (
