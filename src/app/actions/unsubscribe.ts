@@ -3,9 +3,9 @@
 import { createClient } from "@supabase/supabase-js"
 import { redirect } from "next/navigation"
 
-export async function unsubscribe(formData: FormData) {
+export async function unsubscribe(formData: FormData): Promise<void> {
   const email = formData.get("email") as string
-  if (!email) return { error: "Email is required" }
+  if (!email) throw new Error("Email is required")
 
   // Use the service role key to securely bypass RLS for deletion
   const supabaseAdmin = createClient(
@@ -20,7 +20,7 @@ export async function unsubscribe(formData: FormData) {
 
   if (error) {
     console.error("Unsubscribe error:", error)
-    return { error: "Failed to unsubscribe" }
+    throw new Error("Failed to unsubscribe")
   }
 
   redirect("/unsubscribe/success")
