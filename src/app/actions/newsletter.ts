@@ -16,31 +16,75 @@ export async function subscribeToNewsletter(email: string) {
       .from("newsletter_subscribers")
       .insert([{ email }])
 
+    let isAlreadySubscribed = false
+
     // If it's a unique constraint violation (they are already subscribed),
-    // we just ignore the DB error and proceed to send the email anyway 
-    // so they can receive it during testing or if they lost it.
     if (dbError) {
       if (dbError.code !== '23505') { // Postgres unique violation
         console.error("Database error:", dbError)
         return { error: "Failed to subscribe" }
       }
+      isAlreadySubscribed = true
     }
 
-    // 2. Send Welcome Email via Resend
+    // 2. Send Email via Resend
     if (process.env.RESEND_API_KEY) {
       const resend = new Resend(process.env.RESEND_API_KEY)
       
+      const subject = isAlreadySubscribed 
+        ? 'You are already subscribed to AfriBite! 🌍'
+        : 'Welcome to the AfriBite Family! 🌍 (+ Your 10% Off)'
+        
+      const emailContent = isAlreadySubscribed
+        ? `
+            <h2 style="color: #2b2b2b; font-size: 24px; margin: 0 0 20px 0; font-weight: bold;">You're already on the list! 😊</h2>
+            
+            <p style="color: #4a4a4a; font-size: 16px; line-height: 1.6; margin: 0 0 25px 0;">
+              Thank you for checking in! We just wanted to let you know that your email is already safely on our VIP newsletter list.
+            </p>
+            
+            <p style="color: #4a4a4a; font-size: 16px; line-height: 1.6; margin: 0 0 40px 0;">
+              You're all set to continue receiving our latest arrivals, exclusive member deals, and traditional recipes directly to your inbox.
+            </p>
+          `
+        : `
+            <h2 style="color: #2b2b2b; font-size: 24px; margin: 0 0 20px 0; font-weight: bold;">Welcome to the family! 👋</h2>
+            
+            <p style="color: #4a4a4a; font-size: 16px; line-height: 1.6; margin: 0 0 25px 0;">
+              Thank you for subscribing to the AfriBite newsletter. We are incredibly excited to share our passion for authentic African groceries, spices, and specialty ingredients with you.
+            </p>
+            
+            <p style="color: #4a4a4a; font-size: 16px; line-height: 1.6; margin: 0 0 35px 0;">
+              As a token of our appreciation, please enjoy <strong>10% off</strong> your first order. Simply apply the code below at checkout:
+            </p>
+            
+            <!-- Discount Code Box -->
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin: 0 0 35px 0;">
+              <tr>
+                <td align="center">
+                  <div style="display: inline-block; background-color: #fffaf7; border: 2px dashed #ed591f; border-radius: 8px; padding: 20px 40px;">
+                    <span class="discount-code" style="font-size: 28px; font-weight: 800; color: #ed591f; letter-spacing: 3px;">WELCOME10</span>
+                  </div>
+                </td>
+              </tr>
+            </table>
+            
+            <p style="color: #4a4a4a; font-size: 16px; line-height: 1.6; margin: 0 0 40px 0;">
+              Get ready to discover premium quality ingredients delivered straight to your door across Canada. Keep an eye on your inbox for our latest arrivals, exclusive member deals, and traditional recipes.
+            </p>
+          `
+
       const { error: emailError } = await resend.emails.send({
         from: 'AfriBite <onboarding@resend.dev>', // Use verified domain here in production
         to: email,
-        subject: 'Welcome to the AfriBite Family! 🌍 (+ Your 10% Off)',
+        subject: subject,
         html: `
           <!DOCTYPE html>
           <html lang="en">
           <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Welcome to AfriBite</title>
+            <title>AfriBite</title>
             <style>
               /* Responsive styles */
               @media only screen and (max-width: 600px) {
@@ -88,30 +132,7 @@ export async function subscribeToNewsletter(email: string) {
                     <!-- Main Body -->
                     <tr>
                       <td class="content-box" style="padding: 50px 40px;">
-                        <h2 style="color: #2b2b2b; font-size: 24px; margin: 0 0 20px 0; font-weight: bold;">Welcome to the family! 👋</h2>
-                        
-                        <p style="color: #4a4a4a; font-size: 16px; line-height: 1.6; margin: 0 0 25px 0;">
-                          Thank you for subscribing to the AfriBite newsletter. We are incredibly excited to share our passion for authentic African groceries, spices, and specialty ingredients with you.
-                        </p>
-                        
-                        <p style="color: #4a4a4a; font-size: 16px; line-height: 1.6; margin: 0 0 35px 0;">
-                          As a token of our appreciation, please enjoy <strong>10% off</strong> your first order. Simply apply the code below at checkout:
-                        </p>
-                        
-                        <!-- Discount Code Box -->
-                        <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin: 0 0 35px 0;">
-                          <tr>
-                            <td align="center">
-                              <div style="display: inline-block; background-color: #fffaf7; border: 2px dashed #ed591f; border-radius: 8px; padding: 20px 40px;">
-                                <span class="discount-code" style="font-size: 28px; font-weight: 800; color: #ed591f; letter-spacing: 3px;">WELCOME10</span>
-                              </div>
-                            </td>
-                          </tr>
-                        </table>
-                        
-                        <p style="color: #4a4a4a; font-size: 16px; line-height: 1.6; margin: 0 0 40px 0;">
-                          Get ready to discover premium quality ingredients delivered straight to your door across Canada. Keep an eye on your inbox for our latest arrivals, exclusive member deals, and traditional recipes.
-                        </p>
+                        ${emailContent}
                         
                         <!-- CTA Button -->
                         <table width="100%" border="0" cellspacing="0" cellpadding="0">
