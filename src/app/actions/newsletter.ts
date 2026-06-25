@@ -17,13 +17,13 @@ export async function subscribeToNewsletter(email: string) {
       .insert([{ email }])
 
     // If it's a unique constraint violation (they are already subscribed),
-    // we can just return success or a specific message.
+    // we just ignore the DB error and proceed to send the email anyway 
+    // so they can receive it during testing or if they lost it.
     if (dbError) {
-      if (dbError.code === '23505') { // Postgres unique violation
-        return { success: true, message: "Already subscribed!" }
+      if (dbError.code !== '23505') { // Postgres unique violation
+        console.error("Database error:", dbError)
+        return { error: "Failed to subscribe" }
       }
-      console.error("Database error:", dbError)
-      return { error: "Failed to subscribe" }
     }
 
     // 2. Send Welcome Email via Resend
@@ -35,33 +35,152 @@ export async function subscribeToNewsletter(email: string) {
         to: email,
         subject: 'Welcome to the AfriBite Family! 🌍 (+ Your 10% Off)',
         html: `
-          <div style="font-family: Arial, sans-serif; max-w: 600px; margin: 0 auto; color: #2B2B2B; line-height: 1.6;">
-            <div style="background-color: #faf7f2; padding: 30px; text-align: center; border-bottom: 4px solid #ed591f;">
-              <h1 style="color: #214e3a; margin: 0;">Welcome to AfriBite!</h1>
-            </div>
-            
-            <div style="padding: 30px; background-color: #ffffff;">
-              <p>Hi there,</p>
-              <p>Thank you for subscribing to the AfriBite newsletter! We are thrilled to have you in our community.</p>
-              
-              <p>As promised, here is your 10% discount code for your first order. Use it at checkout to enjoy authentic African groceries delivered right to your door:</p>
-              
-              <div style="background-color: #f4f4f5; border: 1px dashed #ed591f; padding: 20px; text-align: center; margin: 30px 0; border-radius: 8px;">
-                <span style="font-size: 24px; font-weight: bold; color: #ed591f; letter-spacing: 2px;">WELCOME10</span>
-              </div>
-              
-              <p>We'll be sending you our latest arrivals, exclusive deals, and authentic recipes. Stay tuned!</p>
-              
-              <div style="text-align: center; margin-top: 40px;">
-                <a href="https://afribite.com" style="background-color: #214e3a; color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 6px; font-weight: bold; display: inline-block;">Start Shopping</a>
-              </div>
-            </div>
-            
-            <div style="text-align: center; padding: 20px; font-size: 12px; color: #737373; background-color: #faf7f2;">
-              <p>© ${new Date().getFullYear()} AfriBite Canada. All rights reserved.</p>
-              <p>206 Rue Antoinette-Robidoux, Longueuil, QC J4J 2V3</p>
-            </div>
-          </div>
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Welcome to AfriBite</title>
+            <style>
+              /* Responsive styles */
+              @media only screen and (max-width: 600px) {
+                .email-container {
+                  width: 100% !important;
+                  margin: auto !important;
+                }
+                .content-box {
+                  padding: 30px 20px !important;
+                }
+                .header-box {
+                  padding: 30px 20px !important;
+                }
+                h1 {
+                  font-size: 26px !important;
+                }
+                h2 {
+                  font-size: 20px !important;
+                }
+                .discount-code {
+                  font-size: 24px !important;
+                }
+              }
+            </style>
+          </head>
+          <body style="margin: 0; padding: 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #f9f9f9; -webkit-font-smoothing: antialiased;">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #f9f9f9; padding: 40px 0;">
+              <tr>
+                <td align="center">
+                  <!-- Main Container -->
+                  <table class="email-container" width="600" border="0" cellspacing="0" cellpadding="0" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                    <!-- Header -->
+                    <tr>
+                      <td class="header-box" align="center" style="background-color: #ffffff; padding: 40px 20px;">
+                        <img src="${process.env.NEXT_PUBLIC_APP_URL || 'https://afribite.com'}/logo.png" alt="AfriBite" width="180" style="display: block; margin: 0 auto; max-width: 100%; height: auto;">
+                        <p style="color: #214e3a; margin: 15px 0 0 0; font-size: 14px; font-weight: bold; text-transform: uppercase; letter-spacing: 3px;">Authentic African Flavors</p>
+                      </td>
+                    </tr>
+                    
+                    <!-- Orange Accent Line -->
+                    <tr>
+                      <td style="background-color: #ed591f; height: 6px; line-height: 6px; font-size: 6px;">&nbsp;</td>
+                    </tr>
+                    
+                    <!-- Main Body -->
+                    <tr>
+                      <td class="content-box" style="padding: 50px 40px;">
+                        <h2 style="color: #2b2b2b; font-size: 24px; margin: 0 0 20px 0; font-weight: bold;">Welcome to the family! 👋</h2>
+                        
+                        <p style="color: #4a4a4a; font-size: 16px; line-height: 1.6; margin: 0 0 25px 0;">
+                          Thank you for subscribing to the AfriBite newsletter. We are incredibly excited to share our passion for authentic African groceries, spices, and specialty ingredients with you.
+                        </p>
+                        
+                        <p style="color: #4a4a4a; font-size: 16px; line-height: 1.6; margin: 0 0 35px 0;">
+                          As a token of our appreciation, please enjoy <strong>10% off</strong> your first order. Simply apply the code below at checkout:
+                        </p>
+                        
+                        <!-- Discount Code Box -->
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin: 0 0 35px 0;">
+                          <tr>
+                            <td align="center">
+                              <div style="display: inline-block; background-color: #fffaf7; border: 2px dashed #ed591f; border-radius: 8px; padding: 20px 40px;">
+                                <span class="discount-code" style="font-size: 28px; font-weight: 800; color: #ed591f; letter-spacing: 3px;">WELCOME10</span>
+                              </div>
+                            </td>
+                          </tr>
+                        </table>
+                        
+                        <p style="color: #4a4a4a; font-size: 16px; line-height: 1.6; margin: 0 0 40px 0;">
+                          Get ready to discover premium quality ingredients delivered straight to your door across Canada. Keep an eye on your inbox for our latest arrivals, exclusive member deals, and traditional recipes.
+                        </p>
+                        
+                        <!-- CTA Button -->
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                          <tr>
+                            <td align="center">
+                              <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://afribite.com'}" target="_blank" style="display: inline-block; background-color: #214e3a; color: #ffffff; text-decoration: none; font-size: 16px; font-weight: bold; padding: 18px 40px; border-radius: 8px; text-transform: uppercase; letter-spacing: 1px;">Start Shopping Now</a>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                    
+                    <!-- Footer with Brand-Colored Social Icons -->
+                    <tr>
+                      <td style="background-color: #f4f4f5; padding: 40px; text-align: center; border-top: 1px solid #e5e5e5;">
+                        <!-- Social Icons (colored using Icons8) -->
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 20px;">
+                          <tr>
+                            <td align="center">
+                              <table border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                  <td style="padding: 0 12px;">
+                                    <a href="https://facebook.com" target="_blank" style="text-decoration: none;">
+                                      <img src="https://img.icons8.com/ios-filled/24/ed591f/facebook-new.png" alt="Facebook" width="24" height="24" style="display: block;">
+                                    </a>
+                                  </td>
+                                  <td style="padding: 0 12px;">
+                                    <a href="https://instagram.com" target="_blank" style="text-decoration: none;">
+                                      <img src="https://img.icons8.com/ios-filled/24/ed591f/instagram-new.png" alt="Instagram" width="24" height="24" style="display: block;">
+                                    </a>
+                                  </td>
+                                  <td style="padding: 0 12px;">
+                                    <a href="https://twitter.com" target="_blank" style="text-decoration: none;">
+                                      <img src="https://img.icons8.com/ios-filled/24/ed591f/twitterx--v1.png" alt="Twitter" width="24" height="24" style="display: block;">
+                                    </a>
+                                  </td>
+                                </tr>
+                              </table>
+                            </td>
+                          </tr>
+                        </table>
+                        
+                        <p style="color: #737373; font-size: 14px; margin: 0 0 10px 0; font-weight: 500;">
+                          © ${new Date().getFullYear()} AfriBite Canada. All rights reserved.
+                        </p>
+                        <p style="color: #8c8c8c; font-size: 13px; line-height: 1.5; margin: 0;">
+                          206 Rue Antoinette-Robidoux<br>
+                          Longueuil, QC J4J 2V3
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                  
+                  <!-- Unsubscribe Link -->
+                  <table class="email-container" width="600" border="0" cellspacing="0" cellpadding="0" style="margin-top: 20px;">
+                    <tr>
+                      <td align="center">
+                        <p style="color: #a3a3a3; font-size: 12px; margin: 0; line-height: 1.5;">
+                          You received this email because you subscribed to updates from AfriBite.<br>
+                          Don't want these emails anymore? <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://afribite.com'}/unsubscribe?email=${encodeURIComponent(email)}" style="color: #ed591f; text-decoration: underline;">Unsubscribe here</a>.
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </body>
+          </html>
         `
       })
 
