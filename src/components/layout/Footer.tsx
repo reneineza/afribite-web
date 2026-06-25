@@ -1,6 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { ArrowRight, Mail, MapPin, Phone } from "lucide-react"
+import { NewsletterForm } from "@/components/NewsletterForm"
 
 const FacebookIcon = ({ className }: { className?: string }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
@@ -26,7 +27,7 @@ export function Footer() {
   return (
     <footer className="relative mt-auto overflow-hidden bg-background border-t border-primary/10">
       {/* Very subtle elegant background gradient overlay */}
-      <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent to-primary/[0.03]"></div>
+      <div className="absolute inset-0 pointer-events-none bg-linear-to-b from-transparent to-primary/3"></div>
       
       <div className="container relative mx-auto px-4 py-20 z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-16 lg:gap-8 mb-20">
@@ -47,19 +48,7 @@ export function Footer() {
                 <Mail className="h-4 w-4 text-secondary" />
                 Join our newsletter
               </h4>
-              <div className="flex max-w-md relative group shadow-sm rounded-lg hover:shadow-md transition-shadow duration-300">
-                <div className="relative flex w-full">
-                  <input 
-                    type="email" 
-                    placeholder="Enter your email address" 
-                    className="flex-1 min-w-0 bg-white border border-primary/10 border-r-0 rounded-l-lg px-5 py-3 text-sm text-foreground placeholder-foreground/40 focus:outline-none focus:border-primary/30 transition-all"
-                  />
-                  <button className="bg-secondary text-primary-foreground px-6 py-3 rounded-r-lg text-sm font-bold hover:bg-secondary/90 transition-colors flex items-center gap-2 group/btn">
-                    Subscribe
-                    <ArrowRight className="h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
-                  </button>
-                </div>
-              </div>
+              <NewsletterForm variant="footer" />
             </div>
           </div>
 
@@ -70,7 +59,7 @@ export function Footer() {
           <div className="lg:col-span-2">
             <h3 className="text-base font-bold mb-6 text-foreground tracking-wide uppercase">Shop</h3>
             <ul className="space-y-4">
-              {['Catalog', 'Categories', 'Deals', 'New Arrivals'].map((item) => (
+              {['Shop', 'Categories', 'Deals', 'New Arrivals'].map((item) => (
                 <li key={item}>
                   <Link 
                     href={`/${item.toLowerCase().replace(' ', '-')}`} 

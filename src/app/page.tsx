@@ -6,7 +6,7 @@ import { ProductCard, type Product } from '@/components/common/ProductCard'
 import { createClient } from '@/lib/supabase/server'
 import { HeroSection } from '@/components/sections/HeroSection'
 import { BenefitsSection } from '@/components/sections/BenefitsSection'
-
+import { NewsletterForm } from '@/components/NewsletterForm'
 // Mock Data
 const categories = [
   { name: 'Spices & Seasonings', image: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?q=80&w=600&auto=format&fit=crop' },
@@ -92,16 +92,7 @@ export default async function Home() {
               <p className="text-primary-foreground/80 text-lg mb-8 max-w-xl mx-auto">
                 Subscribe to our newsletter to get 10% off your first order, plus exclusive access to new arrivals and authentic recipes.
               </p>
-              <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-                <input 
-                  type="email" 
-                  placeholder="Enter your email address" 
-                  className="flex h-12 w-full rounded-md border border-input bg-background px-4 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-foreground"
-                />
-                <button type="button" className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-foreground text-background hover:bg-foreground/90 h-12 px-8 py-2 whitespace-nowrap">
-                  Subscribe
-                </button>
-              </div>
+              <NewsletterForm variant="home" />
             </div>
           </div>
         </div>
