@@ -13,11 +13,29 @@ import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
+type ShippingZone = {
+  id: string;
+  country_code: string;
+  zone_name: string;
+  is_free: boolean;
+  flat_rate: number;
+  active: boolean;
+}
+
+type Address = {
+  full_name?: string;
+  line1?: string;
+  city?: string;
+  province?: string;
+  postal_code?: string;
+  country?: string;
+}
+
 function CheckoutContent() {
   const [mounted, setMounted] = useState(false)
   const cart = useCartStore()
   const [country, setCountry] = useState('CA')
-  const [shippingZones, setShippingZones] = useState<Record<string, any>[]>([])
+  const [shippingZones, setShippingZones] = useState<ShippingZone[]>([])
   const [discountCode, setDiscountCode] = useState('')
   const [paymentMethod, setPaymentMethod] = useState('stripe')
   
@@ -54,7 +72,7 @@ function CheckoutContent() {
           .single()
           
         if (lastOrder && lastOrder.shipping_address) {
-          const addr = lastOrder.shipping_address as Record<string, any>
+          const addr = lastOrder.shipping_address as Address
           setFullName(addr.full_name || '')
           setLine1(addr.line1 || '')
           setCity(addr.city || '')

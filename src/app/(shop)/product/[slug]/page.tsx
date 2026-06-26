@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation'
+import Image from 'next/image'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Separator } from '@/components/ui/separator'
@@ -65,10 +66,12 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
         {/* Product Images */}
         <div className="flex flex-col gap-4">
           <div className="aspect-square relative overflow-hidden rounded-lg bg-muted border border-border">
-            <img 
+            <Image 
               src={product.images && product.images.length > 0 ? product.images[0] : 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?q=80&w=600&auto=format&fit=crop'} 
               alt={product.name} 
-              className="w-full h-full object-cover"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover"
             />
             {product.comparison_price && (
                <Badge className="absolute top-4 left-4 text-sm px-3 py-1 bg-destructive text-destructive-foreground">Sale</Badge>

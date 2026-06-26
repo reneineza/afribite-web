@@ -11,14 +11,40 @@ import Image from 'next/image'
 import { CheckCircle2, Info } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
+type OrderItem = {
+  id: string;
+  quantity: number;
+  price_at_purchase: number;
+  products?: {
+    name: string;
+    images: string[];
+  };
+}
+
+type Order = {
+  id: string;
+  subtotal: number;
+  discount: number;
+  shipping_rate: number;
+  total: number;
+  shipping_address?: {
+    full_name?: string;
+    line1?: string;
+    city?: string;
+    province?: string;
+    postal_code?: string;
+    country?: string;
+  };
+}
+
 function SuccessPageContent() {
   const searchParams = useSearchParams()
   const orderId = searchParams.get('order_id')
   const method = searchParams.get('method')
   const clearCart = useCartStore((state) => state.clearCart)
   const [mounted, setMounted] = useState(false)
-  const [order, setOrder] = useState<Record<string, any> | null>(null)
-  const [orderItems, setOrderItems] = useState<Record<string, any>[]>([])
+  const [order, setOrder] = useState<Order | null>(null)
+  const [orderItems, setOrderItems] = useState<OrderItem[]>([])
 
   useEffect(() => {
     setMounted(true)
