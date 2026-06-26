@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 import { WishlistButton } from '@/components/common/WishlistButton'
 
 export interface Product {
@@ -51,9 +51,12 @@ export function ProductCard({ product }: ProductCardProps) {
         </CardContent>
       </Link>
       <CardFooter className="p-4 pt-0 mt-auto">
-        <Button asChild className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
-          <Link href={`/product/${product.slug}`}>View Options</Link>
-        </Button>
+        <Link 
+          href={`/product/${product.slug}`} 
+          className={buttonVariants({ variant: 'default', className: "w-full" })}
+        >
+          View Options
+        </Link>
       </CardFooter>
     </Card>
   )
