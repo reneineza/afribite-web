@@ -51,7 +51,9 @@ export function ProductCard({ product }: ProductCardProps) {
         </CardContent>
       </Link>
       <CardFooter className="p-4 pt-0 mt-auto">
-        <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">Add to Cart</Button>
+        <Button asChild className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
+          <Link href={`/product/${product.slug}`}>View Options</Link>
+        </Button>
       </CardFooter>
     </Card>
   )

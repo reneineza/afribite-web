@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { createClient } from '@supabase/supabase-js'
-import { sendOrderConfirmation } from '@/lib/email'
+import { sendOrderConfirmation, sendAdminOrderNotification } from '@/lib/email'
 // Initialize Stripe with placeholder key for build to pass
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string || 'sk_test_placeholder', {
   apiVersion: '2026-05-27.dahlia',
@@ -49,6 +49,29 @@ export async function POST(req: Request) {
           console.error('Failed to update order status:', error)
         } else {
           console.log(`Successfully marked order ${orderId} as paid.`)
+          
+          // Deduct stock from products
+          const { data: orderItems } = await supabaseAdmin
+            .from('order_items')
+            .select('product_id, quantity')
+            .eq('order_id', orderId)
+
+          if (orderItems) {
+            for (const item of orderItems) {
+              const { data: product } = await supabaseAdmin
+                .from('products')
+                .select('stock_quantity')
+                .eq('id', item.product_id)
+                .single()
+              
+              if (product) {
+                await supabaseAdmin
+                  .from('products')
+                  .update({ stock_quantity: Math.max(0, product.stock_quantity - item.quantity) })
+                  .eq('id', item.product_id)
+              }
+            }
+          }
         }
       }
       
@@ -59,6 +82,35 @@ export async function POST(req: Request) {
       if (orderId && customerEmail) {
         const totalAmount = session.amount_total ? session.amount_total / 100 : 0
         await sendOrderConfirmation(customerEmail, orderId, totalAmount)
+        await sendAdminOrderNotification(orderId, totalAmount, customerEmail)
+
+        // Handle discount code usage tracking
+        const appliedDiscountCode = session.metadata?.discount_code_used;
+        if (appliedDiscountCode) {
+          const supabaseAdmin = createClient(
+            process.env.NEXT_PUBLIC_SUPABASE_URL!,
+            process.env.SUPABASE_SERVICE_ROLE_KEY!
+          )
+          
+          if (appliedDiscountCode === 'WELCOME10') {
+            const { error: updateError } = await supabaseAdmin
+              .from('newsletter_subscribers')
+              .update({ used_welcome_discount: true })
+              .eq('email', customerEmail)
+              
+            if (updateError) {
+              console.error('Failed to mark welcome discount as used:', updateError)
+            } else {
+              console.log(`Marked WELCOME10 as used for ${customerEmail}`)
+            }
+          }
+          
+          // Increment general coupon uses
+          const { data: c } = await supabaseAdmin.from('coupons').select('uses_count').eq('code', appliedDiscountCode).single()
+          if (c) {
+            await supabaseAdmin.from('coupons').update({ uses_count: c.uses_count + 1 }).eq('code', appliedDiscountCode)
+          }
+        }
       }
       break
     

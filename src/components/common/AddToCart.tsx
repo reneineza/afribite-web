@@ -1,10 +1,12 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { useCartStore } from "@/store/useCartStore"
 import { type Product } from "@/components/common/ProductCard"
-import { toast } from "sonner" // Assuming sonner is used for toasts, if not we can add it or remove
+import { toast } from "sonner"
+import { createClient } from "@/lib/supabase/client"
 
 interface AddToCartProps {
   product: Product
@@ -14,6 +16,7 @@ interface AddToCartProps {
 export function AddToCart({ product, stockQuantity }: AddToCartProps) {
   const [quantity, setQuantity] = useState(1)
   const addItem = useCartStore((state) => state.addItem)
+  const router = useRouter()
 
   const increaseQuantity = () => {
     if (quantity < stockQuantity) {
@@ -27,13 +30,20 @@ export function AddToCart({ product, stockQuantity }: AddToCartProps) {
     }
   }
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
+    const supabase = createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) {
+      toast.error('Please log in to add items to your cart')
+      router.push('/login')
+      return
+    }
+
     addItem(product, quantity)
-    // Optional: add a small visual feedback here if toast is available
     if (typeof toast !== 'undefined' && toast.success) {
       toast.success(`${quantity} x ${product.name} added to cart!`)
     } else {
-      // Fallback native alert if sonner isn't setup
       alert(`${quantity} x ${product.name} added to cart!`)
     }
   }
