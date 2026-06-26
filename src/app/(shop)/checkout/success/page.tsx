@@ -17,8 +17,8 @@ function SuccessPageContent() {
   const method = searchParams.get('method')
   const clearCart = useCartStore((state) => state.clearCart)
   const [mounted, setMounted] = useState(false)
-  const [order, setOrder] = useState<any>(null)
-  const [orderItems, setOrderItems] = useState<any[]>([])
+  const [order, setOrder] = useState<Record<string, any> | null>(null)
+  const [orderItems, setOrderItems] = useState<Record<string, any>[]>([])
 
   useEffect(() => {
     setMounted(true)
@@ -75,7 +75,7 @@ function SuccessPageContent() {
           ) : (
             <div className="mb-8">
               <p className="text-muted-foreground">
-                We've received your payment securely via Stripe. We are now processing your order and will send you a tracking email once it ships.
+                We&apos;ve received your payment securely via Stripe. We are now processing your order and will send you a tracking email once it ships.
               </p>
             </div>
           )}

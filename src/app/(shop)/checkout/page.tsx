@@ -17,7 +17,7 @@ function CheckoutContent() {
   const [mounted, setMounted] = useState(false)
   const cart = useCartStore()
   const [country, setCountry] = useState('CA')
-  const [shippingZones, setShippingZones] = useState<any[]>([])
+  const [shippingZones, setShippingZones] = useState<Record<string, any>[]>([])
   const [discountCode, setDiscountCode] = useState('')
   const [paymentMethod, setPaymentMethod] = useState('stripe')
   
@@ -54,7 +54,7 @@ function CheckoutContent() {
           .single()
           
         if (lastOrder && lastOrder.shipping_address) {
-          const addr = lastOrder.shipping_address as any
+          const addr = lastOrder.shipping_address as Record<string, any>
           setFullName(addr.full_name || '')
           setLine1(addr.line1 || '')
           setCity(addr.city || '')

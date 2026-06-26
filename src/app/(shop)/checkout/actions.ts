@@ -225,7 +225,7 @@ export async function createCheckoutSession(formData: FormData) {
   let stripeCouponId = undefined
   if (appliedDiscountCode) {
     try {
-      const couponPayload: any = {
+      const couponPayload: Stripe.CouponCreateParams = {
         duration: 'once',
       }
       if (appliedDiscountType === 'percentage') {
