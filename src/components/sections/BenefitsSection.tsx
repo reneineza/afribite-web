@@ -45,7 +45,7 @@ const BENEFITS = [
 
 const TRUST_BADGES = [
   { icon: Globe, label: "Ships Canada-Wide" },
-  { icon: Star, label: "4.9★ Customer Rating" },
+  { icon: Star, label: "4.9/5 Customer Rating" },
   { icon: Zap, label: "Same-Day Processing" },
 ]
 

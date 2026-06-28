@@ -8,6 +8,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Separator } from '@/components/ui/separator'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Trash2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
@@ -56,8 +57,8 @@ export default function CartPage() {
                   {cart.items.map((item) => (
                     <TableRow key={item.product.id}>
                       <TableCell className="flex items-center gap-4">
-                        <div className="h-16 w-16 bg-muted rounded overflow-hidden shrink-0 border border-border">
-                          <img src={item.product.images[0]} alt={item.product.name} className="w-full h-full object-cover" />
+                        <div className="h-16 w-16 relative bg-muted rounded overflow-hidden shrink-0 border border-border">
+                          <Image src={item.product.images[0]} alt={item.product.name} fill className="object-cover" />
                         </div>
                         <div className="flex flex-col">
                           <span className="font-medium text-foreground">{item.product.name}</span>

@@ -1,4 +1,4 @@
-import { HelpCircle } from 'lucide-react'
+import { HelpCircle, ChevronDown } from 'lucide-react'
 
 const faqs = [
   { question: 'What payment methods do you accept?', answer: 'We accept all major credit cards (Visa, Mastercard, Amex), PayPal, and Apple Pay for your convenience and security.' },
@@ -28,9 +28,7 @@ export default function FAQPage() {
               <summary className="flex cursor-pointer items-center justify-between gap-1.5 p-5 text-foreground font-medium hover:bg-primary/5 transition-colors">
                 <h2 className="text-lg">{faq.question}</h2>
                 <span className="shrink-0 rounded-full bg-white p-1.5 text-foreground border border-primary/10 group-open:-rotate-180 transition-transform duration-300">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="size-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
+                  <ChevronDown className="size-5" />
                 </span>
               </summary>
               <div className="p-5 pt-0 text-foreground/70 leading-relaxed border-t border-primary/5">

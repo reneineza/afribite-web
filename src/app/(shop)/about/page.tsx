@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import { Globe, HeartHandshake, Star } from 'lucide-react'
 
 export default function AboutPage() {
   return (
@@ -57,17 +58,23 @@ export default function AboutPage() {
           <h2 className="text-3xl font-bold text-foreground mb-12">What We Stand For</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-card p-8 rounded-xl shadow-sm border border-border">
-              <div className="text-4xl mb-4">🌍</div>
+              <div className="mb-4 flex justify-center">
+                <Globe className="w-10 h-10 text-primary" />
+              </div>
               <h3 className="text-xl font-bold mb-2">Authenticity</h3>
               <p className="text-muted-foreground">No substitutes. We provide the real ingredients essential for traditional recipes.</p>
             </div>
             <div className="bg-card p-8 rounded-xl shadow-sm border border-border">
-              <div className="text-4xl mb-4">🤝</div>
+              <div className="mb-4 flex justify-center">
+                <HeartHandshake className="w-10 h-10 text-primary" />
+              </div>
               <h3 className="text-xl font-bold mb-2">Community</h3>
               <p className="text-muted-foreground">We celebrate the rich diversity of African cuisine and the cultures that create it.</p>
             </div>
             <div className="bg-card p-8 rounded-xl shadow-sm border border-border">
-              <div className="text-4xl mb-4">⭐</div>
+              <div className="mb-4 flex justify-center">
+                <Star className="w-10 h-10 text-primary fill-primary/20" />
+              </div>
               <h3 className="text-xl font-bold mb-2">Quality</h3>
               <p className="text-muted-foreground">Premium sourcing and careful packaging to ensure freshness upon delivery.</p>
             </div>

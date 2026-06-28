@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { createClient } from '@/lib/supabase/client'
+import { Check } from 'lucide-react'
 
 export default function WholesalePage() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
@@ -92,7 +93,7 @@ export default function WholesalePage() {
               
               {status === 'success' ? (
                 <div className="flex flex-col items-center justify-center h-full text-center p-8 bg-green-50/50 rounded-xl border border-green-200">
-                  <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-4 text-2xl">✓</div>
+                  <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-4"><Check className="w-8 h-8" /></div>
                   <h3 className="text-xl font-bold text-green-800 mb-2">Application Received!</h3>
                   <p className="text-green-700">Thank you for your interest. Our wholesale team will review your application and contact you within 2-3 business days.</p>
                 </div>

@@ -3,7 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb'
-import { Clock, ChefHat, ArrowLeft } from 'lucide-react'
+import { Clock, ChefHat } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 async function getRecipe(slug: string) {

@@ -6,6 +6,7 @@ import { Separator } from '@/components/ui/separator'
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb'
 import { ReviewForm } from './ReviewForm'
 import { AddToCart } from '@/components/common/AddToCart'
+import { Star } from 'lucide-react'
 
 import { createClient } from '@/lib/supabase/server'
 
@@ -84,7 +85,9 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
           <h1 className="text-3xl font-bold tracking-tight text-foreground">{product.name}</h1>
           
           <div className="flex items-center gap-2 mt-2">
-            <div className="flex text-accent text-lg">★</div>
+            <div className="flex text-accent text-lg">
+              <Star className="w-5 h-5 fill-accent text-accent" />
+            </div>
             <span className="text-sm font-medium text-foreground">{averageRating}</span>
             <span className="text-sm text-muted-foreground">({reviewCount} reviews)</span>
           </div>
@@ -174,8 +177,10 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                         <p className="font-semibold text-foreground">{review.profiles?.full_name || review.profiles?.email || 'Verified Buyer'}</p>
                         <p className="text-sm text-muted-foreground">{new Date(review.created_at).toLocaleDateString()}</p>
                       </div>
-                      <div className="text-accent text-lg flex tracking-tighter">
-                        {'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}
+                      <div className="flex gap-0.5 mt-1">
+                        {[...Array(5)].map((_, i) => (
+                          <Star key={i} className={`w-4 h-4 ${i < review.rating ? 'fill-accent text-accent' : 'text-accent/30'}`} />
+                        ))}
                       </div>
                     </div>
                     <p className="text-foreground mt-2">{review.comment}</p>
