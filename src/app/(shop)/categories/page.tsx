@@ -2,16 +2,12 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { ChevronRight } from 'lucide-react'
 
-const categories = [
-  { name: 'Spices & Seasonings', description: 'Authentic African spices to elevate your meals.', image: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&q=80', href: '/shop?category=spices' },
-  { name: 'Snacks & Beverages', description: 'Popular treats and drinks from across the continent.', image: 'https://images.unsplash.com/photo-1599598425947-330026217c5b?auto=format&fit=crop&q=80', href: '/shop?category=snacks' },
-  { name: 'Grains & Flours', description: 'Essential staples for traditional African dishes.', image: 'https://images.unsplash.com/photo-1586201375761-83865001e8ac?auto=format&fit=crop&q=80', href: '/shop?category=grains' },
-  { name: 'Oils & Sauces', description: 'Rich palm oil, marinades, and specialized cooking sauces.', image: 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&q=80', href: '/shop?category=oils' },
-  { name: 'Meat & Seafood', description: 'Premium cuts, smoked fish, and traditional proteins.', image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80', href: '/shop?category=meat' },
-  { name: 'Health & Beauty', description: 'Natural skincare and holistic health products.', image: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&q=80', href: '/shop?category=beauty' },
-]
+import { createClient } from '@/lib/supabase/server'
 
-export default function CategoriesPage() {
+export default async function CategoriesPage() {
+  const supabase = await createClient()
+  const { data: dbCategories } = await supabase.from('categories').select('*').order('created_at')
+  const categories = dbCategories || []
   return (
     <div className="min-h-screen bg-background pb-20">
       {/* Header */}
@@ -26,9 +22,9 @@ export default function CategoriesPage() {
       <div className="container mx-auto px-4 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {categories.map((category) => (
-            <Link key={category.name} href={category.href} className="group relative rounded-2xl overflow-hidden border border-primary/10 bg-white shadow-sm hover:shadow-xl transition-all duration-300">
+            <Link key={category.id} href={`/shop?category=${category.slug}`} className="group relative rounded-2xl overflow-hidden border border-primary/10 bg-white shadow-sm hover:shadow-xl transition-all duration-300">
               <div className="relative h-64 w-full overflow-hidden">
-                <Image src={category.image} alt={category.name} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
+                <Image src={category.image_url || 'https://images.unsplash.com/photo-1544148103-0773bf10d330?auto=format&fit=crop&q=80'} alt={category.name} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
                 <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent" />
               </div>
               <div className="absolute bottom-0 left-0 w-full p-6 text-white transform transition-transform duration-300">

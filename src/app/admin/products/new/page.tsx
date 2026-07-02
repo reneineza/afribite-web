@@ -6,8 +6,12 @@ import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { createProduct } from '../actions'
+import { createClient } from '@/lib/supabase/server'
 
-export default function NewProductPage() {
+export default async function NewProductPage() {
+  const supabase = await createClient()
+  const { data: categories } = await supabase.from('categories').select('id, name').order('name')
+
   return (
     <div className="space-y-8 max-w-3xl">
       <div className="flex items-center gap-4">
@@ -32,6 +36,16 @@ export default function NewProductPage() {
             <div className="space-y-2">
               <Label htmlFor="description">Description</Label>
               <Input id="description" name="description" placeholder="A rich blend of traditional spices..." />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="category_id">Category</Label>
+              <select id="category_id" name="category_id" className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                <option value="">Select a category</option>
+                {categories?.map((cat) => (
+                  <option key={cat.id} value={cat.id}>{cat.name}</option>
+                ))}
+              </select>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

@@ -8,7 +8,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 
-const CATEGORIES = ['Spices & Seasonings', 'Grains & Flours', 'Beans & Legumes', 'Oils', 'Snacks']
+const CATEGORIES = ['Drinks', 'Flours', 'Spices', 'Snacks', 'Special Injanga']
 
 export function CatalogFilters({ dbCategories = [] }: { dbCategories?: { id: string, slug: string, name: string }[] }) {
   const router = useRouter()

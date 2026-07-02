@@ -19,6 +19,7 @@ export async function createProduct(formData: FormData) {
   const price = parseFloat(formData.get('price') as string)
   const stock_quantity = parseInt(formData.get('stock') as string, 10)
   const imageFile = formData.get('image') as File | null
+  const category_id = formData.get('category_id') as string | null
 
   if (!name || isNaN(price) || isNaN(stock_quantity)) {
     throw new Error('Missing required fields.')
@@ -62,6 +63,7 @@ export async function createProduct(formData: FormData) {
       name,
       slug,
       description,
+      category_id: category_id || null,
       price,
       stock_quantity,
       sku,

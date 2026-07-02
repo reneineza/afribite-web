@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { MapPin, Phone, Mail, Clock } from 'lucide-react'
-import { createClient } from '@/lib/supabase/client'
+
 
 export default function ContactPage() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
@@ -18,20 +18,24 @@ export default function ContactPage() {
     const subject = formData.get('subject') as string
     const message = formData.get('message') as string
 
-    const supabase = createClient()
-    
-    const { error } = await supabase
-      .from('contact_messages')
-      .insert([
-        { name, email, subject, message }
-      ])
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, subject, message }),
+      })
 
-    if (error) {
+      const result = await response.json()
+
+      if (response.ok && result.success) {
+        setStatus('success')
+        ;(e.target as HTMLFormElement).reset()
+      } else {
+        throw new Error(result.error || 'Failed to send message')
+      }
+    } catch (error) {
       console.error(error)
       setStatus('error')
-    } else {
-      setStatus('success')
-      ;(e.target as HTMLFormElement).reset()
     }
   }
 

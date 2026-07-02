@@ -8,12 +8,6 @@ import { HeroSection } from '@/components/sections/HeroSection'
 import { BenefitsSection } from '@/components/sections/BenefitsSection'
 import { NewsletterForm } from '@/components/NewsletterForm'
 // Mock Data
-const categories = [
-  { name: 'Spices & Seasonings', image: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?q=80&w=600&auto=format&fit=crop' },
-  { name: 'Grains & Flours', image: 'https://images.unsplash.com/photo-1604328698692-f76ea9498e76?q=80&w=600&auto=format&fit=crop' },
-  { name: 'Snacks & Beverages', image: 'https://images.unsplash.com/photo-1621245464303-125439a03975?q=80&w=600&auto=format&fit=crop' }
-]
-
 export default async function Home() {
   const supabase = await createClient()
   const { data: featuredProducts } = await supabase
@@ -21,6 +15,8 @@ export default async function Home() {
     .select('*')
     .eq('is_active', true)
     .limit(4)
+  const { data: dbCategories } = await supabase.from('categories').select('*').order('created_at')
+  const categories = dbCategories || []
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero Section */}
@@ -36,11 +32,11 @@ export default async function Home() {
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Explore Our Categories</h2>
             <p className="text-muted-foreground max-w-2xl text-lg">We source the highest quality ingredients directly from the continent to ensure your meals are perfectly authentic.</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {categories.map((category, index) => (
-              <Link key={index} href="/shop" className="group relative overflow-hidden rounded-2xl aspect-4/3 bg-muted shadow-lg border border-border/50">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+            {categories.map((category) => (
+              <Link key={category.id} href={`/shop?category=${category.slug}`} className="group relative overflow-hidden rounded-2xl aspect-4/3 bg-muted shadow-lg border border-border/50">
                 <Image 
-                  src={category.image} 
+                  src={category.image_url || 'https://images.unsplash.com/photo-1544148103-0773bf10d330?q=80&w=600&auto=format&fit=crop'} 
                   alt={category.name} 
                   fill
                   className="object-cover transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-100"

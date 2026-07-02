@@ -38,6 +38,10 @@ export default async function AdminLayout({ children }: { children: ReactNode })
             <Package className="h-5 w-5 text-sidebar-primary" />
             Products
           </Link>
+          <Link href="/admin/categories" className="flex items-center gap-3 px-3 py-2 text-sidebar-foreground hover:bg-sidebar-accent rounded-md transition-colors">
+            <Package className="h-5 w-5 text-sidebar-primary" />
+            Categories
+          </Link>
           <Link href="/admin/orders" className="flex items-center gap-3 px-3 py-2 text-sidebar-foreground hover:bg-sidebar-accent rounded-md transition-colors">
             <ShoppingCart className="h-5 w-5 text-sidebar-primary" />
             Orders
@@ -49,6 +53,10 @@ export default async function AdminLayout({ children }: { children: ReactNode })
           <Link href="/admin/recipes" className="flex items-center gap-3 px-3 py-2 text-sidebar-foreground hover:bg-sidebar-accent rounded-md transition-colors">
             <ChefHat className="h-5 w-5 text-sidebar-primary" />
             Recipes
+          </Link>
+          <Link href="/admin/wholesale" className="flex items-center gap-3 px-3 py-2 text-sidebar-foreground hover:bg-sidebar-accent rounded-md transition-colors">
+            <Package className="h-5 w-5 text-sidebar-primary" />
+            Wholesale
           </Link>
           <Link href="/admin/messages" className="flex items-center gap-3 px-3 py-2 text-sidebar-foreground hover:bg-sidebar-accent rounded-md transition-colors">
             <MessageSquare className="h-5 w-5 text-sidebar-primary" />

@@ -90,3 +90,66 @@ export async function sendAdminOrderNotification(orderId: string, totalAmount: n
     return { success: false, error }
   }
 }
+
+export async function sendInquiryAutoReply(email: string, name: string) {
+  if (!resend) {
+    console.warn('RESEND_API_KEY is not set. Skipping inquiry auto-reply.');
+    return { success: false, error: 'RESEND_API_KEY is missing' };
+  }
+
+  try {
+    const data = await resend.emails.send({
+      from: 'AfriBite <info@afribite.com>',
+      to: [email],
+      subject: 'We have received your inquiry',
+      html: `
+        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #2B2B2B;">
+          <h1 style="color: #1B4332;">Hello ${name},</h1>
+          <p>Thank you for reaching out to AfriBite!</p>
+          <p>We have successfully received your inquiry and our team will get back to you as soon as possible, usually within 24 hours.</p>
+          <p>If you have any urgent questions, please feel free to reply directly to this email.</p>
+          <br/>
+          <p>Best regards,</p>
+          <p><strong>The AfriBite Team</strong></p>
+        </div>
+      `,
+    })
+
+    return { success: true, data }
+  } catch (error) {
+    console.error('Error sending inquiry auto-reply:', error)
+    return { success: false, error }
+  }
+}
+
+export async function sendInquiryToAdmin(email: string, name: string, subject: string, message: string) {
+  if (!resend) {
+    console.warn('RESEND_API_KEY is not set. Skipping admin inquiry notification.');
+    return { success: false, error: 'RESEND_API_KEY is missing' };
+  }
+
+  try {
+    const data = await resend.emails.send({
+      from: 'AfriBite System <info@afribite.com>',
+      to: ['info@afribite.com'],
+      replyTo: email,
+      subject: `New Contact Inquiry: ${subject}`,
+      html: `
+        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #2B2B2B;">
+          <h2 style="color: #1B4332;">New Customer Inquiry</h2>
+          <p><strong>From:</strong> ${name} (${email})</p>
+          <p><strong>Subject:</strong> ${subject}</p>
+          <hr style="border: 1px solid #eee; margin: 20px 0;" />
+          <p style="white-space: pre-wrap;">${message}</p>
+          <hr style="border: 1px solid #eee; margin: 20px 0;" />
+          <p><em>Reply to this email to respond directly to the customer.</em></p>
+        </div>
+      `,
+    })
+
+    return { success: true, data }
+  } catch (error) {
+    console.error('Error sending admin inquiry notification:', error)
+    return { success: false, error }
+  }
+}

@@ -14,33 +14,22 @@ interface ContactMessage {
   created_at: string;
 }
 
-interface WholesaleApplication {
-  id: string;
-  business_name: string;
-  contact_name: string;
-  email: string;
-  phone: string;
-  status: string;
-  details: string;
-  created_at: string;
-}
+
 
 export default function AdminMessagesPage() {
   const [contacts, setContacts] = useState<ContactMessage[]>([])
-  const [wholesale, setWholesale] = useState<WholesaleApplication[]>([])
+
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function fetchData() {
       const supabase = createClient()
       
-      const [contactsRes, wholesaleRes] = await Promise.all([
+      const [contactsRes] = await Promise.all([
         supabase.from('contact_messages').select('*').order('created_at', { ascending: false }),
-        supabase.from('wholesale_applications').select('*').order('created_at', { ascending: false })
       ])
 
       if (contactsRes.data) setContacts(contactsRes.data)
-      if (wholesaleRes.data) setWholesale(wholesaleRes.data)
       
       setLoading(false)
     }
@@ -57,7 +46,6 @@ export default function AdminMessagesPage() {
       <Tabs defaultValue="contact">
         <TabsList className="mb-6">
           <TabsTrigger value="contact">Contact Forms ({contacts.length})</TabsTrigger>
-          <TabsTrigger value="wholesale">Wholesale Applications ({wholesale.length})</TabsTrigger>
         </TabsList>
 
         <TabsContent value="contact" className="space-y-4">
@@ -79,32 +67,7 @@ export default function AdminMessagesPage() {
           ))}
         </TabsContent>
 
-        <TabsContent value="wholesale" className="space-y-4">
-          {wholesale.length === 0 ? <p>No wholesale applications yet.</p> : wholesale.map(app => (
-            <Card key={app.id}>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-lg flex justify-between">
-                  <span>{app.business_name}</span>
-                  <span className="text-sm text-muted-foreground font-normal">
-                    {new Date(app.created_at).toLocaleDateString()}
-                  </span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
-                  <div><strong>Contact:</strong> {app.contact_name}</div>
-                  <div><strong>Email:</strong> {app.email}</div>
-                  <div><strong>Phone:</strong> {app.phone || 'N/A'}</div>
-                  <div><strong>Status:</strong> <span className="capitalize">{app.status}</span></div>
-                </div>
-                <div className="bg-muted p-4 rounded-md">
-                  <p className="text-sm font-medium mb-1">Details/Volume Needs:</p>
-                  <p className="text-sm text-muted-foreground whitespace-pre-wrap">{app.details}</p>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </TabsContent>
+
       </Tabs>
     </div>
   )

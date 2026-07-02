@@ -26,6 +26,7 @@ export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [user, setUser] = useState<SupabaseUser | null>(null)
   const [currency, setCurrency] = useState<Currency>("CAD")
+  const [categories, setCategories] = useState<{name: string, slug: string}[]>([])
 
   const items = useCartStore((state) => state.items)
   const cartItemCount = items.reduce((total, item) => total + item.quantity, 0)
@@ -38,6 +39,7 @@ export function Header() {
 
     const supabase = createClient()
     supabase.auth.getUser().then(({ data }) => setUser(data.user))
+    supabase.from('categories').select('name, slug').order('created_at').then(({ data }) => setCategories(data || []))
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null)
@@ -278,19 +280,18 @@ export function Header() {
         {/* Left: Categories dropdown + Nav */}
         <div className="flex items-center h-full">
           <DropdownMenu>
-            <DropdownMenuTrigger className="flex items-center space-x-2 bg-primary text-primary-foreground hover:bg-primary/90 px-4 h-full outline-none transition-colors border-r border-primary/10">
-              <MenuIcon className="h-5 w-5" />
-              <span className="font-bold text-sm tracking-wide">SHOP BY CATEGORIES</span>
-              <ChevronDown className="h-4 w-4 ml-2 opacity-70" />
+            <DropdownMenuTrigger className="group flex items-center space-x-3 bg-primary/5 text-primary hover:bg-primary hover:text-primary-foreground px-6 py-2 h-10 rounded-full outline-none transition-all duration-500 border border-primary/20 hover:border-primary hover:shadow-lg mr-4">
+              <MenuIcon className="h-4 w-4 transition-transform duration-500 group-hover:-rotate-180" />
+              <span className="font-extrabold text-[13px] tracking-widest uppercase">Categories</span>
+              <ChevronDown className="h-4 w-4 opacity-60 transition-transform duration-500 group-data-[state=open]:rotate-180" />
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" className="w-56 mt-2 rounded-sm border border-primary/20">
+            <DropdownMenuContent align="start" className="w-64 mt-3 rounded-2xl border border-primary/10 shadow-2xl bg-white/95 backdrop-blur-xl p-2 animate-in slide-in-from-top-2">
               <DropdownMenuGroup>
                 <DropdownMenuLabel>Categories</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => router.push("/categories/spices")} className="cursor-pointer w-full">Spices &amp; Seasonings</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => router.push("/categories/snacks")} className="cursor-pointer w-full">Snacks &amp; Sweets</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => router.push("/categories/staples")} className="cursor-pointer w-full">Pantry Staples</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => router.push("/categories/beverages")} className="cursor-pointer w-full">Beverages</DropdownMenuItem>
+                {categories.map((cat) => (
+                  <DropdownMenuItem key={cat.slug} onClick={() => router.push(`/shop?category=${cat.slug}`)} className="cursor-pointer w-full">{cat.name}</DropdownMenuItem>
+                ))}
               </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>
