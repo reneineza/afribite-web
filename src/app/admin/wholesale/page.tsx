@@ -81,8 +81,8 @@ export default async function WholesaleAdminPage() {
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-2 items-center">
                         <Dialog>
-                          <DialogTrigger asChild>
-                            <Button variant="outline" size="sm">View Details</Button>
+                          <DialogTrigger render={<Button variant="outline" size="sm" />}>
+                            View Details
                           </DialogTrigger>
                           <DialogContent>
                             <DialogHeader>
